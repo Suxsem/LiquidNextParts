@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+     <PreferenceCategory
+            android:title="Noise and sensitivity">
+	<EditTextPreference 
+		android:key="noise" 
+		android:title="Set noise"
+        android:summary="@string/noiseandsetsumm"
+        android:numeric="integer"
+        android:inputType="number"
+		android:defaultValue="50"/>
+	<EditTextPreference 
+		android:key="sensitivity" 
+		android:title="Set sensitivity"
+        android:summary="@string/noiseandsetsumm"
+        android:numeric="integer"
+        android:inputType="number"
+		android:defaultValue="25" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="LED">
+   	<CheckBoxPreference
+                android:key="powerled"
+                android:title="Disable Power LED"
+                android:summary="Disable Power LED while charging" />
+   	<CheckBoxPreference
+                android:key="fixled"
+                android:title="LEDs service"
+                android:summary="Run a custom LEDs service in background" />
+    <CheckBoxPreference
+                android:key="fixsms"
+                android:dependency="fixled"                
+                android:title="Fix sms LED"
+                android:summary="Override sms LED managment" />               
+   	<CheckBoxPreference
+                android:key="bottomled"
+                android:dependency="fixled"                
+                android:title="Use softkey LED"
+                android:summary="Use softkey LED as New SMS LED" />
+    <CheckBoxPreference
+                android:key="fixcall"
+                android:dependency="fixled"                
+                android:title="Fix call LED"
+                android:summary="Override call LED managment" />
+    </PreferenceCategory>              
+    <PreferenceCategory
+            android:title="Other">
+        <CheckBoxPreference
+                android:key="hf"
+                android:title="Haptic feedback"
+                android:summary="softkey vibration" />
+        <EditTextPreference 
+			android:key="sdcache" 
+			android:title="Set sd cache size"
+        	android:summary="@string/sdcachesum"
+        	android:numeric="integer"
+        	android:inputType="number"
+			android:defaultValue="2048"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Info">
+   		<Preference android:title="Info and help" 
+   					android:key="menu_info" 
+   					android:summary="about this app" />
+    </PreferenceCategory>
+</PreferenceScreen>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="description">LiquidNextParts official app</string>
+<string name="app_name">LiquidNextParts</string>
+<string name="app_vname">1.5</string>  
+<string name="vibrON">Haptic Feedback ON</string>
+<string name="vibrOFF">Haptic Feedback OFF</string>
+<string name="sens">sensitivity</string>
+<string name="noise">noise</string>
+<string name="set">set</string>
+<string name="noiseval">50</string>
+<string name="sensitivityval">25</string>
+<string name="noiseandsetsumm">set a value between 20 and 75</string>
+<string name="sdcachesum">Set sd cache size, must be between 128 and 4096</string>
+<string name="sens_help">Sensitivity and noise must be set between 20 and 75, where 20 means max sensibility and 75 the min. <b>Recommended: 25 for sensibility and 50 for noise.</b></string>
+<string name="haptic_help">Haptic feedback is the vibrate feedback issued by pressing the softkeys.</string>
+<string name="sdcache_help">SD Cache improves the speed of your SD card. The value must be between 128 and 4096. Reccomended value: 2048.</string>
+<string name="disablebattery_help">Disable battery led when a USB cable is connected. When unchecked remove and reinsert USB cable to enable battery led.</string>
+<string name="fixsmscall_help">Required to fix sms and call LEDs (service: drain a little more battery than normal).</string>
+<string name="softkeynotification_help">Use softkey led as new sms notification led (service: drain more battery than normal).</string>
+</resources>
+

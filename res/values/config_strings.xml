@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="sens_device">/sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity</string>
+<string name="sens_noise_device">/sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise</string>
+</resources>
