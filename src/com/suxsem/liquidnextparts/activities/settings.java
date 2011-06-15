@@ -1,8 +1,12 @@
 package com.suxsem.liquidnextparts.activities;
 
 
+import java.lang.reflect.Array;
+
+import com.suxsem.liquidnextparts.components.DownloadTask;
 import com.suxsem.liquidnextparts.components.SmsLED_service;
 import com.suxsem.liquidnextparts.components.Eula;
+import com.suxsem.liquidnextparts.components.parsebuildprop;
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
@@ -10,8 +14,12 @@ import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.SdCache;
 import com.suxsem.liquidnextparts.Strings;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -59,8 +67,11 @@ public class settings extends PreferenceActivity {
 	public SharedPreferences prefs;
 	public String noiseValue, sensitivityValue;
 	public int SDCacheSize;
+	private settings myactivity = this;
 	EditTextPreference editNoise, editSensitivity;
-    
+	public String DownloadTaskInformations = "";
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 
@@ -70,7 +81,9 @@ public class settings extends PreferenceActivity {
 		if (!LSystem.checkInitFolder()){
 			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000).show();
 			this.finish(); //Exit app
-		}		
+		}
+		ROOT = LiquidSettings.isRoot();
+		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	
     	if(prefs.getBoolean("firststart", true)){
@@ -80,6 +93,86 @@ public class settings extends PreferenceActivity {
     		editor.putBoolean("fixsms", false);
     		editor.putBoolean("fixcall", true);
     		editor.commit();
+    	}
+    	
+    	String romodversion = parsebuildprop.parseString("ro.modversion");
+    	if(!romodversion.equals(getString(R.string.lastversion))){
+    		String[] previousversionarray = getString(R.string.previousversion).split("/");
+    		boolean possibleupdate = false;
+    		for (int i = 0; i < previousversionarray.length; i++){
+    			if(romodversion.equals(previousversionarray[i]))possibleupdate=true;
+    		}
+    		
+    		if(possibleupdate){
+            	
+            				
+    			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("NEW ROM UPDATE");
+    			builder.setCancelable(true);         
+                builder.setMessage("There is a new update for your ROM!\n\nVersion: "+getString(R.string.lastversion)+"\nSize: "+getString(R.string.size)+" MB");
+                builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    	ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                        android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                        android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                        if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+                        wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+                        	
+                    	final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+getString(R.string.lastversion),"Save as /sdcard/update"};
+
+                    	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+                    	builder.setTitle("Choose download location");
+                    	builder.setItems(items, new DialogInterface.OnClickListener() {
+                    	    public void onClick(DialogInterface dialog, int item) {
+                    	        if (item == 0){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/LiquidNext_LastUpdate.zip";
+                    	        }else if (item == 1){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/"+getString(R.string.lastversion)+".zip";
+                    	        }else if (item == 2){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/update.zip";
+                    	        }
+                            	final CharSequence[] items = {"Reboot in recovery after download", "Don't reboot in recovery after download"};
+
+                            	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+                            	builder.setTitle("Choose action after download");
+                            	builder.setItems(items, new DialogInterface.OnClickListener() {
+                            	    public void onClick(DialogInterface dialog, int item) {
+                            	        if (item == 0){
+                            	        	DownloadTaskInformations = DownloadTaskInformations + "#r";
+                            	        }else if (item == 1){
+                            	        	DownloadTaskInformations = DownloadTaskInformations + "#nr";
+                            	        }                  	                                    	        
+                            	        new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
+                            	    }
+                            	});
+                            	builder.create().show();
+                    	    }
+                    	});
+                    	builder.create().show();
+                        }else{
+                        	Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 2000).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    	
+                    }
+                });
+                builder.create().show();    			
+    		}else{
+    			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("NEW ROM UPDATE");
+    			builder.setCancelable(true);         
+                builder.setMessage("There is a new update, but your ROM is too old to be automatically updated. Please visit Modaco website to get the last LiquidNext ROM available!");
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    	
+                    }
+                });
+                builder.create().show();
+    		}
+    		
+    		
     	}
     	
     	if(prefs.getBoolean("fixled", false)){                
@@ -111,7 +204,6 @@ public class settings extends PreferenceActivity {
 			sdcache.setText(Integer.toString(SDCacheSize));
 		}
 		
-		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
         
@@ -286,3 +378,4 @@ public class settings extends PreferenceActivity {
 	}
 	
 }
+
