@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 
 import com.suxsem.liquidnextparts.components.DownloadTask;
 import com.suxsem.liquidnextparts.components.SmsLED_service;
-import com.suxsem.liquidnextparts.components.Eula;
+import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.components.parsebuildprop;
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.LSystem;
@@ -29,6 +29,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.util.Log;
 import android.widget.Toast;
@@ -81,18 +82,8 @@ public class settings extends PreferenceActivity {
 			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000).show();
 			this.finish(); //Exit app
 		}
-		ROOT = LiquidSettings.isRoot();
-		
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	
-    	if(prefs.getBoolean("firststart", true)){
-    		Editor editor = prefs.edit();
-    		editor.putBoolean("firststart", false);
-    		editor.putBoolean("fixled", true);
-    		editor.putBoolean("fixsms", false);
-    		editor.putBoolean("fixcall", true);
-    		editor.commit();
-    	}
+		ROOT = LiquidSettings.isRoot();	
+    	new StartSystem().startsystem(true, myactivity);
     	
     	String romodversion = parsebuildprop.parseString("ro.modversion");
     	if(!romodversion.equals(getString(R.string.lastversion))){
@@ -173,13 +164,7 @@ public class settings extends PreferenceActivity {
     		
     		
     	}
-    	
-    	if(prefs.getBoolean("fixled", false)){                
-        	Intent smsledservice = new Intent(this, SmsLED_service.class);
-        	this.startService(smsledservice);
-    	}
   		
-		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
 		final Context context = getApplicationContext();
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
