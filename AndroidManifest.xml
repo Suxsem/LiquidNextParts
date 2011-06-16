@@ -15,7 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       
+        <activity android:name=".components.NotificationHelperStopProcess"
+                  android:label="@string/app_name">
+        </activity>       
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
         android:label="Information and documentation" />

@@ -71,7 +71,6 @@ public class settings extends PreferenceActivity {
 	EditTextPreference editNoise, editSensitivity;
 	public String DownloadTaskInformations = "";
 	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 
@@ -109,7 +108,7 @@ public class settings extends PreferenceActivity {
     			AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("NEW ROM UPDATE");
     			builder.setCancelable(true);         
-                builder.setMessage("There is a new update for your ROM!\n\nVersion: "+getString(R.string.lastversion)+"\nSize: "+getString(R.string.size)+" MB");
+                builder.setMessage("There is a new update for your ROM!\n\nVersion: "+getString(R.string.lastversion)+"\nSize: "+getString(R.string.size)+" MB\nNotes: "+getString(R.string.notes));
                 builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -143,7 +142,7 @@ public class settings extends PreferenceActivity {
                             	        }else if (item == 1){
                             	        	DownloadTaskInformations = DownloadTaskInformations + "#nr";
                             	        }                  	                                    	        
-                            	        new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
+                            	        DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
                             	    }
                             	});
                             	builder.create().show();

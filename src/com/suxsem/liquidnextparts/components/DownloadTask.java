@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.suxsem.liquidnextparts.LiquidSettings;
+import com.suxsem.liquidnextparts.R;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -27,18 +28,23 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
     private double downloaded; // number of bytes downloaded
     private int status = DOWNLOADING; //status of current process
 
-    private static final int MAX_BUFFER_SIZE = 1000000; //1kb
+    private static final int MAX_BUFFER_SIZE = 3000000; //bytes
     private static final int DOWNLOADING = 0;
     private static final int COMPLETE = 1;
 
     private String filelocation = "";
     private String gorecovery = "";
     private Integer previousperc = 0;
-    private NotificationHelper mNotificationHelper;
+    static NotificationHelper mNotificationHelper;
+    public static AsyncTask downloadtask;
+    
     public DownloadTask(Context context){
-        mNotificationHelper = new NotificationHelper(context);
+        mNotificationHelper = new NotificationHelper(context);        
     }
     
+    public static void stopdownload(){
+    	
+    }
     public void DownloadManager()
     {
         d          = null;
@@ -69,6 +75,11 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
                 // loop with step
                 while (status == DOWNLOADING)
                 {
+                        if (isCancelled()){
+                        	mNotificationHelper.cancelled(filename);
+                        	break;                        	
+                        }
+
                     byte buffer[];
                     if (fileSize - downloaded > MAX_BUFFER_SIZE)
                     {
@@ -147,15 +158,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
     @Override
     protected void onPostExecute(Drawable result)
     {
-    	mNotificationHelper.completed();
-    	if(gorecovery.equals("r")){
-    		LiquidSettings.runRootCommand("reboot recovery");
-    	}
+    	mNotificationHelper.completed(gorecovery);
         // do something
     }
-    @Override
-    protected void onCancelled() {
-    }
-
 }
 
