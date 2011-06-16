@@ -1,8 +1,5 @@
 package com.suxsem.liquidnextparts.activities;
 
-
-import java.lang.reflect.Array;
-
 import com.suxsem.liquidnextparts.components.DownloadTask;
 import com.suxsem.liquidnextparts.components.SmsLED_service;
 import com.suxsem.liquidnextparts.components.StartSystem;
@@ -15,27 +12,19 @@ import com.suxsem.liquidnextparts.SdCache;
 import com.suxsem.liquidnextparts.Strings;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.provider.Settings;
-import android.provider.CallLog.Calls;
-import android.util.Log;
 import android.widget.Toast;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;

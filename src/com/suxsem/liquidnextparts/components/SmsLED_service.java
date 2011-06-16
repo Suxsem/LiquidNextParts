@@ -1,17 +1,13 @@
 package com.suxsem.liquidnextparts.components;
 
-import java.lang.reflect.Method;
 
 import com.suxsem.liquidnextparts.LiquidSettings;
-
-import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -20,8 +16,6 @@ import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.SmsManager;
-import android.util.Log;
-import android.telephony.TelephonyManager;
 
 public class SmsLED_service extends Service {
 	SmsManager sms;

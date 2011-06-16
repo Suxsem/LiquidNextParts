@@ -7,14 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import com.suxsem.liquidnextparts.LiquidSettings;
-import com.suxsem.liquidnextparts.R;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 {
@@ -36,7 +31,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
     private String gorecovery = "";
     private Integer previousperc = 0;
     static NotificationHelper mNotificationHelper;
-    public static AsyncTask downloadtask;
+    @SuppressWarnings("unchecked")
+	public static AsyncTask downloadtask;
     
     public DownloadTask(Context context){
         mNotificationHelper = new NotificationHelper(context);        

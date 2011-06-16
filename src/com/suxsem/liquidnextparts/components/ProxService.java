@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 public class ProxService extends Service {
 	
 	public static PowerManager powermanager;
 	public static PowerManager.WakeLock wakelock = null;
 	public static Service context = null;
+	@SuppressWarnings("static-access")
 	public void onCreate() {
 		super.onCreate();
 		context = this;

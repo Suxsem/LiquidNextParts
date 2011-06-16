@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="firstflashincremental">5</string>
 <string name="previousversion">LiquidNext 1.1.0/LiquidNext 1.1.1</string>
 <string name="lastversion">LiquidNext 1.2</string>
 <string name="size">23</string>
