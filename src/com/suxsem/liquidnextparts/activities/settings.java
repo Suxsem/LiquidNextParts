@@ -5,6 +5,7 @@ import com.suxsem.liquidnextparts.components.SmsLED_service;
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.components.parsebuildprop;
 import com.suxsem.liquidnextparts.BatteryLED;
+import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
@@ -161,6 +162,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
 		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
 		final Preference menu_info = findPreference("menu_info");
+		final Preference diskspace = findPreference("diskspace");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -280,7 +282,22 @@ public class settings extends PreferenceActivity {
 			}
 		});
 		
-		
+		diskspace.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				final AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+                builder.setTitle("DiskSpace");
+    			builder.setCancelable(true);         
+                builder.setMessage(DiskSpace.getdiskspace());
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    	
+                    }
+                });
+                builder.create().show();
+				return true;
+			}
+		});
+
 		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {

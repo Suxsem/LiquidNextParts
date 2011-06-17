@@ -1,6 +1,8 @@
 package com.suxsem.liquidnextparts.components;
 
+import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
+import com.suxsem.liquidnextparts.Strings;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -33,7 +35,7 @@ public class StartSystem {
                 PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
                 mNotification.setLatestEventInfo(context, mContentTitle, contentText, mContentIntent);
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-				mNotificationManager.notify(1, mNotification);
+				mNotificationManager.notify(2, mNotification);
         	}
         	if(prefs.getBoolean("fixled", false)){                
             	Intent fixledservice = new Intent(context, SmsLED_service.class);
@@ -53,6 +55,7 @@ public class StartSystem {
         	Settings.System.putInt(context.getContentResolver(), "light_sensor_custom", 1);
         	Settings.System.putInt(context.getContentResolver(), "light_decrease", 1);
         	Settings.System.putInt(context.getContentResolver(), "light_hysteresis", 0);
+        	LiquidSettings.runRootCommand("sh /system/xbin/editxml.sh /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml button_led_notify false");
         	
             int icon = android.R.drawable.stat_sys_warning;
             CharSequence tickerText = "System need a REBOOT"; //Initial text that appears in the status bar

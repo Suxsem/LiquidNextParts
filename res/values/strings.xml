@@ -2,7 +2,6 @@
 <resources>
 <string name="description">LiquidNextParts official app</string>
 <string name="app_name">LiquidNextParts</string>
-<string name="app_vname">1.5</string>  
 <string name="vibrON">Haptic Feedback ON</string>
 <string name="vibrOFF">Haptic Feedback OFF</string>
 <string name="sens">sensitivity</string>
