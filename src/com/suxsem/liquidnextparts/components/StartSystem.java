@@ -1,6 +1,7 @@
 package com.suxsem.liquidnextparts.components;
 
 import com.suxsem.liquidnextparts.LiquidSettings;
+import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.Strings;
 
@@ -23,6 +24,7 @@ public class StartSystem {
         		editor.putBoolean("fixled", true);
         		editor.putBoolean("fixsms", false);
         		editor.putBoolean("fixcall", true);
+        		editor.putString("2g3gmode", "nm3");
         		editor.commit();
         		
                 int icon = android.R.drawable.stat_sys_warning;
@@ -49,6 +51,8 @@ public class StartSystem {
         		editor.commit();
         		firstflash(context);
         	}
+        	
+        	NetworkMode.switchnetworkmode(context);
 
         }
         private void firstflash(Context context){

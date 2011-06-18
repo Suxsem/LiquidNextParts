@@ -8,6 +8,7 @@ import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
+import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.SdCache;
 import com.suxsem.liquidnextparts.Strings;
@@ -20,10 +21,12 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.widget.Toast;
 import android.content.Intent;
 import android.view.Menu;
@@ -73,8 +76,7 @@ public class settings extends PreferenceActivity {
 			this.finish(); //Exit app
 		}
 		ROOT = LiquidSettings.isRoot();	
-    	new StartSystem().startsystem(true, myactivity);
-    	
+    	new StartSystem().startsystem(true, myactivity);		 
     	String romodversion = parsebuildprop.parseString("ro.modversion");
     	if(!romodversion.equals(getString(R.string.lastversion))){
     		String[] previousversionarray = getString(R.string.previousversion).split("/");
@@ -163,6 +165,8 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
 		final Preference menu_info = findPreference("menu_info");
 		final Preference diskspace = findPreference("diskspace");
+		final Preference hotreboot = findPreference("hotreboot");
+		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -297,6 +301,23 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		networkmode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				NetworkMode.switchnetworkmode(myactivity);
+				return true;
+			}
+		});
+		
+		hotreboot.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				LiquidSettings.runRootCommand("killall system_server");
+				return true;
+			}
+		});
 
 		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -363,8 +384,8 @@ public class settings extends PreferenceActivity {
 	
 	
 	private void updateValues() {
-		editNoise.setSummary("noise is set to " + noiseValue);
-		editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
+		editNoise.setSummary("Noise is set to " + noiseValue);
+		editSensitivity.setSummary("Sensitivity is set to " + sensitivityValue);		
 	}
 	
 }

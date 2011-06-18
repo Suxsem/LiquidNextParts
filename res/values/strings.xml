@@ -17,5 +17,15 @@
 <string name="disablebattery_help">Disable battery led when a USB cable is connected. When unchecked remove and reinsert USB cable to enable battery led.</string>
 <string name="fixsmscall_help">Required to fix sms and call LEDs (service: drain a little more battery than normal).</string>
 <string name="softkeynotification_help">Use softkey led as new sms notification led (service: drain more battery than normal).</string>
+<array name="nma">
+                <item>2G only</item>
+                <item>3g only</item>
+                <item>Auto (3g preferred)</item>
+</array>
+<array name="nmavalue">
+                <item>nm1</item>
+                <item>nm2</item>
+                <item>nm3</item>
+</array>
 </resources>
 
