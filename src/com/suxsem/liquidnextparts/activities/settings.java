@@ -26,7 +26,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.widget.Toast;
 import android.content.Intent;
 import android.view.Menu;
@@ -77,95 +76,20 @@ public class settings extends PreferenceActivity {
 		}
 		ROOT = LiquidSettings.isRoot();	
     	new StartSystem().startsystem(true, myactivity);		 
-    	String romodversion = parsebuildprop.parseString("ro.modversion");
-    	if(!romodversion.equals(getString(R.string.lastversion))){
-    		String[] previousversionarray = getString(R.string.previousversion).split("/");
-    		boolean possibleupdate = false;
-    		for (int i = 0; i < previousversionarray.length; i++){
-    			if(romodversion.equals(previousversionarray[i]))possibleupdate=true;
-    		}
-    		
-    		if(possibleupdate){
-            	
-            				
-    			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("NEW ROM UPDATE");
-    			builder.setCancelable(true);         
-                builder.setMessage("There is a new update for your ROM!\n\nVersion: "+getString(R.string.lastversion)+"\nSize: "+getString(R.string.size)+" MB\nNotes: "+getString(R.string.notes));
-                builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
 
-                    	ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-                        android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                        android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                        if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
-                        wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
-                        	
-                    	final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+getString(R.string.lastversion),"Save as /sdcard/update"};
-
-                    	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
-                    	builder.setTitle("Choose download location");
-                    	builder.setItems(items, new DialogInterface.OnClickListener() {
-                    	    public void onClick(DialogInterface dialog, int item) {
-                    	        if (item == 0){
-                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/LiquidNext_LastUpdate.zip";
-                    	        }else if (item == 1){
-                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/"+getString(R.string.lastversion)+".zip";
-                    	        }else if (item == 2){
-                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/update.zip";
-                    	        }
-                            	final CharSequence[] items = {"Reboot in recovery after download", "Don't reboot in recovery after download"};
-
-                            	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
-                            	builder.setTitle("Choose action after download");
-                            	builder.setItems(items, new DialogInterface.OnClickListener() {
-                            	    public void onClick(DialogInterface dialog, int item) {
-                            	        if (item == 0){
-                            	        	DownloadTaskInformations = DownloadTaskInformations + "#r";
-                            	        }else if (item == 1){
-                            	        	DownloadTaskInformations = DownloadTaskInformations + "#nr";
-                            	        }                  	                                    	        
-                            	        DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
-                            	    }
-                            	});
-                            	builder.create().show();
-                    	    }
-                    	});
-                    	builder.create().show();
-                        }else{
-                        	Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 2000).show();
-                        }
-                    }
-                });
-                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {                    	
-                    }
-                });
-                builder.create().show();    			
-    		}else{
-    			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("NEW ROM UPDATE");
-    			builder.setCancelable(true);         
-                builder.setMessage("There is a new update, but your ROM is too old to be automatically updated. Please visit Modaco website to get the last LiquidNext ROM available!");
-                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {                    	
-                    }
-                });
-                builder.create().show();
-    		}
-    		
-    		
-    	}
-  		
+    	updaterom();
+    	
 		addPreferencesFromResource(R.menu.menu); 
 		final Context context = getApplicationContext();
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
 		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
+		final CheckBoxPreference noprox = (CheckBoxPreference)findPreference("noprox");
 		final Preference menu_info = findPreference("menu_info");
 		final Preference diskspace = findPreference("diskspace");
 		final Preference hotreboot = findPreference("hotreboot");
+		final Preference forceupdate = findPreference("forceupdate");
 		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
@@ -318,6 +242,16 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		forceupdate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				if(updaterom() == false){
+					Toast.makeText(context, "No new ROM updates", 2000).show();
+				}
+				return true;
+			}
+		});
 
 		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -379,6 +313,32 @@ public class settings extends PreferenceActivity {
 			return true;
 			}
 		});
+		noprox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			public boolean onPreferenceClick(Preference preference) {
+			if (noprox.isChecked()) {
+				parsebuildprop.editString("hw.acer.psensor_calib_min_base", "32717");		    	
+			}else{
+				parsebuildprop.editString("hw.acer.psensor_calib_min_base", "32716");
+			}
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+            builder.setTitle("Reboot required");
+			builder.setCancelable(true);         
+            builder.setMessage("This option requires a reboot to be applied. Do you want to reboot now?");
+            builder.setPositiveButton("Reboot", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	LiquidSettings.runRootCommand("reboot");
+                }
+            });
+            builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {                    	
+                }
+            });
+            builder.create().show();    							
+			return true;
+			}
+		});
 }
 
 	
@@ -388,5 +348,93 @@ public class settings extends PreferenceActivity {
 		editSensitivity.setSummary("Sensitivity is set to " + sensitivityValue);		
 	}
 	
+	private boolean updaterom(){
+		String romodversion = parsebuildprop.parseString("ro.modversion");
+    	if(!romodversion.equals(getString(R.string.lastversion))){    		
+    		boolean possibleupdate = false;
+    		if(getString(R.string.previousversion).equals("ALL")){
+    			possibleupdate=true;
+    		}else{
+    		String[] previousversionarray = getString(R.string.previousversion).split("/");
+    		
+    		for (int i = 0; i < previousversionarray.length; i++){
+    			if(romodversion.equals(previousversionarray[i]))possibleupdate=true;
+    		}
+			}
+    		
+    		if(possibleupdate){
+            	
+            				
+    			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("NEW ROM UPDATE");
+    			builder.setCancelable(true);         
+                builder.setMessage("There is a new update for your ROM!\n\nVersion: "+getString(R.string.lastversion)+"\nSize: "+getString(R.string.size)+" MB\nNotes: "+getString(R.string.notes));
+                builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    	ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                        android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                        android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                        if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+                        wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+                        	
+                    	final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+getString(R.string.lastversion),"Save as /sdcard/update"};
+
+                    	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+                    	builder.setTitle("Choose download location");
+                    	builder.setItems(items, new DialogInterface.OnClickListener() {
+                    	    public void onClick(DialogInterface dialog, int item) {
+                    	        if (item == 0){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/LiquidNext_LastUpdate.zip";
+                    	        }else if (item == 1){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/"+getString(R.string.lastversion)+".zip";
+                    	        }else if (item == 2){
+                    	        	DownloadTaskInformations = DownloadTaskInformations + "/sdcard/update.zip";
+                    	        }
+                            	final CharSequence[] items = {"Reboot in recovery after download", "Don't reboot in recovery after download"};
+
+                            	AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+                            	builder.setTitle("Choose action after download");
+                            	builder.setItems(items, new DialogInterface.OnClickListener() {
+                            	    public void onClick(DialogInterface dialog, int item) {
+                            	        if (item == 0){
+                            	        	DownloadTaskInformations = DownloadTaskInformations + "#r";
+                            	        }else if (item == 1){
+                            	        	DownloadTaskInformations = DownloadTaskInformations + "#nr";
+                            	        }                  	                                    	        
+                            	        DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
+                            	    }
+                            	});
+                            	builder.create().show();
+                    	    }
+                    	});
+                    	builder.create().show();
+                        }else{
+                        	Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 2000).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    	
+                    }
+                });
+                builder.create().show();    			
+    		}else{
+    			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("NEW ROM UPDATE");
+    			builder.setCancelable(true);         
+                builder.setMessage("There is a new update, but your ROM is too old to be automatically updated. Please visit Modaco website to get the last LiquidNext ROM available!");
+                builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    	
+                    }
+                });
+                builder.create().show();
+    		}
+    		return true;
+    		
+    		
+    	}
+    	return false;    	    	
+	}
 }
 

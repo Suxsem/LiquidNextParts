@@ -62,21 +62,34 @@ public class NotificationHelper {
      * called when the background task is complete, this removes the notification from the status bar.
      * We could also use this to add a new ‘task complete’ notification
      */
-    public void completed(String gorecovery)    {
+    public void completed(String options)    {
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
 
         int icon = android.R.drawable.stat_sys_download_done;
-        CharSequence tickerText = "Download completed"; //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
-        mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-        CharSequence contentText = "Download completed"; //Text of the notification in the pull down
-        Intent notificationIntent = new Intent();
-        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-    	if(gorecovery.equals("r")){
+        
+        if(!options.equals("error")){
+        	CharSequence tickerText = "Download completed"; //Initial text that appears in the status bar
+        	long when = System.currentTimeMillis();
+        	mNotification = new Notification(icon, tickerText, when);
+        	mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
+        	CharSequence contentText = "Now flash zip from recovery"; //Text of the notification in the pull down        
+        	Intent notificationIntent = new Intent();
+        	mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+        	mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+        	mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        }else{
+            CharSequence tickerText = "Download ROM ERROR"; //Initial text that appears in the status bar
+            long when = System.currentTimeMillis();
+            mNotification = new Notification(icon, tickerText, when);
+            mContentTitle = "Download ROM ERROR"; //Full title of the notification in the pull down
+            CharSequence contentText = "Download the update again"; //Text of the notification in the pull down        
+            Intent notificationIntent = new Intent();
+            mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+            mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mNotification);	
+    	}
+    	if(options.equals("r")){
     		LiquidSettings.runRootCommand("reboot recovery");
     	}
     }

@@ -3,8 +3,6 @@ package com.suxsem.liquidnextparts.components;
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.R;
-import com.suxsem.liquidnextparts.Strings;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,6 +22,7 @@ public class StartSystem {
         		editor.putBoolean("fixled", true);
         		editor.putBoolean("fixsms", false);
         		editor.putBoolean("fixcall", true);
+        		editor.putBoolean("noprox", false);
         		editor.putString("2g3gmode", "nm3");
         		editor.commit();
         		

@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import android.content.Context;
-
 public class DiskSpace {
 	private static String result;
 	private static Process process;

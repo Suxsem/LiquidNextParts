@@ -1,6 +1,7 @@
 package com.suxsem.liquidnextparts.components;
 
 import java.io.*;
+import com.suxsem.liquidnextparts.LSystem;
 
 public class parsebuildprop {
         private static String build_prop = "/system/build.prop";
@@ -44,5 +45,41 @@ public class parsebuildprop {
                         result = -1;
                 }
                 return result;
+        }
+        public static void editString (String prop, String value){
+        	File propFile = new File(build_prop);
+            
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            DataInputStream dis = null;
+            String FinalFile = "";
+            try {
+                    fis = new FileInputStream(propFile);
+                    bis = new BufferedInputStream(fis);
+                    dis = new DataInputStream(bis);
+                    String buffer;                    
+                    boolean found = false;
+                    while(dis.available() > 0) {
+                            buffer = dis.readLine();                            
+                            if(buffer.startsWith(prop)){
+                                    FinalFile = FinalFile + prop + "=" + value + "\n";
+                                    found = true;
+                    		}else{
+                    			FinalFile = FinalFile + buffer +"\n";
+                    		}
+                    }
+                    if(found == false){
+                    	FinalFile = FinalFile + prop + "=" + value + "\n";
+                    }
+        			LSystem.RemountRW();
+                    BufferedWriter out = new BufferedWriter(new FileWriter("/system/build.prop"));
+                    out.write(FinalFile);
+                    out.flush();
+                    out.close();
+                    LSystem.RemountROnly();
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
+        	return;
         }
 }

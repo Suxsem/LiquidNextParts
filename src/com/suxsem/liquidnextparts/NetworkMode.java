@@ -1,9 +1,5 @@
 package com.suxsem.liquidnextparts;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

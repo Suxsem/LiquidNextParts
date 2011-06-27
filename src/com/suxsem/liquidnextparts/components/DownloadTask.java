@@ -63,6 +63,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
             {
             	
                 conn     = (HttpURLConnection) new URL(url[0]).openConnection();
+                conn.setConnectTimeout(10000);
+                conn.setReadTimeout(10000);
                 fileSize = conn.getContentLength();
                 FileOutputStream fos = new FileOutputStream(filename);
                 conn.connect();
@@ -87,8 +89,9 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
                         buffer = new byte[(int) (fileSize - downloaded)];
                         out      = new ByteArrayOutputStream((int) (fileSize - downloaded));
                     }
+                                        
                     int read = stream.read(buffer);
-
+                    
                     if (read == -1)
                     {
                         publishProgress(100);
@@ -154,7 +157,11 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
     @Override
     protected void onPostExecute(Drawable result)
     {
+    	if(status == COMPLETE){
     	mNotificationHelper.completed(gorecovery);
+    	}else{
+    	mNotificationHelper.completed("error");    		
+    	}
         // do something
     }
 }
