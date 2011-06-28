@@ -2,6 +2,7 @@ package com.suxsem.liquidnextparts.components;
 
 import java.io.*;
 import com.suxsem.liquidnextparts.LSystem;
+import com.suxsem.liquidnextparts.LiquidSettings;
 
 public class parsebuildprop {
         private static String build_prop = "/system/build.prop";
@@ -71,11 +72,17 @@ public class parsebuildprop {
                     if(found == false){
                     	FinalFile = FinalFile + prop + "=" + value + "\n";
                     }
+                    	
+                    fis.close();
+                    bis.close();
+                    dis.close();                    
         			LSystem.RemountRW();
+        			LiquidSettings.runRootCommand("chmod 646 /system/build.prop");
                     BufferedWriter out = new BufferedWriter(new FileWriter("/system/build.prop"));
                     out.write(FinalFile);
                     out.flush();
                     out.close();
+                    LiquidSettings.runRootCommand("chmod 644 /system/build.prop");
                     LSystem.RemountROnly();
             } catch (Exception e) {
                     e.printStackTrace();

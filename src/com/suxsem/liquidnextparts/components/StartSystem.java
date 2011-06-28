@@ -52,7 +52,6 @@ public class StartSystem {
         	}
         	
         	NetworkMode.switchnetworkmode(context);
-
         }
         private void firstflash(Context context){
         	Settings.System.putInt(context.getContentResolver(), "light_sensor_custom", 1);
