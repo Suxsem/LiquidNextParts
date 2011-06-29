@@ -12,6 +12,7 @@
 <string name="noiseandsetsumm">set a value between 20 and 75</string>
 <string name="sdcachesum">Set sd cache size, must be between 128 and 4096</string>
 <string name="sens_help">Sensitivity and noise must be set between 20 and 75, where 20 means max sensibility and 75 the min. <b>Recommended: 25 for sensibility and 50 for noise.</b></string>
+<string name="softsens_help">Softkey sensitivity must be set between 15 and 30, where 15 means max sensibility and 30 the min. <b>Recommended: 18</b></string>
 <string name="haptic_help">Haptic feedback is the vibrate feedback issued by pressing the softkeys.</string>
 <string name="sdcache_help">SD Cache improves the speed of your SD card. The value must be between 128 and 4096. Reccomended value: 2048.</string>
 <string name="disablebattery_help">Disable battery led when a USB cable is connected. When unchecked remove and reinsert USB cable to enable battery led.</string>

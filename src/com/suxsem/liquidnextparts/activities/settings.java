@@ -75,10 +75,10 @@ public class settings extends PreferenceActivity {
 	public boolean ROOT = false;
 	public boolean isFirstTime = false;
 	public SharedPreferences prefs;
-	public String noiseValue, sensitivityValue;
+	public String noiseValue, sensitivityValue, softsensValue;
 	public int SDCacheSize;
 	private settings myactivity = this;
-	EditTextPreference editNoise, editSensitivity;
+	EditTextPreference editNoise, editSensitivity, editSoftsens;
 	public String DownloadTaskInformations = "";
 	private ProgressDialog waitdialog;
 	Boolean update = false;
@@ -112,7 +112,8 @@ public class settings extends PreferenceActivity {
 
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
-
+		editSoftsens = (EditTextPreference)findPreference("softsens");
+		
 		if (!LSystem.hapticAvailable())
 			hf.setEnabled(false);
 		else
@@ -127,6 +128,7 @@ public class settings extends PreferenceActivity {
 
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
+		softsensValue = editSoftsens.getText();
 
 		updateValues();
 
@@ -169,11 +171,11 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
-							Toast.makeText(context, "Sensitivity set correctly", 1750).show();
+							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
 							Toast.makeText(context, "Error, unable to set noise", 4000).show();
 					}
@@ -202,13 +204,13 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
-							Toast.makeText(context, "Sensitivity set correctly", 1750).show();
+							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
-							Toast.makeText(context, "Error, unable to set sensitivity", 4000).show();
+							Toast.makeText(context, "Error, unable to set noise", 4000).show();
 					}
 					updateValues();
 				} else {
@@ -218,6 +220,38 @@ public class settings extends PreferenceActivity {
 			}
 		});
 
+		editSoftsens.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (!Strings.onlyNumber(newValue.toString())){
+					Toast.makeText(context, "You must enter a numeric value!", 4000).show();
+					return false;
+				} //Check if the value is numeric, THEN assign it to sensitivityValue
+				softsensValue = newValue.toString();
+				int softsensValueInt = Integer.parseInt(softsensValue);
+				if(softsensValueInt < (15))
+					softsensValue = ("15");
+				else if (softsensValueInt>(30))
+					softsensValue=("30");
+
+				if(ROOT) {
+					if(ROOT && LSystem.RemountRW()) {
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+						LSystem.RemountROnly();
+						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
+						else 
+							Toast.makeText(context, "Error, unable to set noise", 4000).show();
+					}
+					updateValues();
+				} else {
+					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
+				}
+				return true;
+			}
+		});
+		
 		menu_info.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -363,6 +397,7 @@ public class settings extends PreferenceActivity {
 	private void updateValues() {
 		editNoise.setSummary("Noise is set to " + noiseValue);
 		editSensitivity.setSummary("Sensitivity is set to " + sensitivityValue);		
+		editSoftsens.setSummary("Softkey sensitivity is set to "+ softsensValue);
 	}
 
 	private boolean updaterom(){

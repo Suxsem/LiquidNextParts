@@ -1,8 +1,11 @@
 package com.suxsem.liquidnextparts.components;
 
+import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.R;
+import com.suxsem.liquidnextparts.Strings;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class StartSystem {
         public void startsystem(boolean forcenewflash, Context context) {
@@ -54,6 +58,12 @@ public class StartSystem {
         	NetworkMode.switchnetworkmode(context);
         }
         private void firstflash(Context context){
+        	LSystem.RemountRW();
+        	LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "20")+" > /system/etc/init.d/06sensitivity");
+			LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+			LSystem.RemountROnly();
+			LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
+			
         	Settings.System.putInt(context.getContentResolver(), "light_sensor_custom", 1);
         	Settings.System.putInt(context.getContentResolver(), "light_decrease", 1);
         	Settings.System.putInt(context.getContentResolver(), "light_hysteresis", 0);
