@@ -45,12 +45,24 @@ public class ProxService extends Service {
 	
 	public static void terminaservizio(){
 		try {
+			LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
 			wakelock.release();
 			context.stopSelf();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+	}
+	
+	public void onDesotry(){
+
+		try {
+			this.unregisterReceiver(mIntentReceiver);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {

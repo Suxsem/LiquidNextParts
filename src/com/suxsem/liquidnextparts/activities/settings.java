@@ -88,8 +88,7 @@ public class settings extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) { 
 
 		super.onCreate(savedInstanceState);
-
-
+				
 		if (!LSystem.checkInitFolder()){
 			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 4000).show();
 			this.finish(); //Exit app
@@ -464,7 +463,8 @@ public class settings extends PreferenceActivity {
 											}else if (item == 1){
 												DownloadTaskInformations = DownloadTaskInformations + "#nr";
 											}                  	                                    	        
-											DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);                            	        
+											DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);
+											startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
 										}
 									});
 									builder.create().show();

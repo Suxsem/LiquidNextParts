@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="13"
+      android:versionCode="16"
       android:installLocation="auto" android:versionName="@string/app_vname" package="com.suxsem.liquidnextparts">
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -21,7 +21,12 @@
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
         android:label="Information and documentation" />
-
+        
+        <activity class=".Webview"
+        android:screenOrientation="portrait"
+		android:name=".activities.Webview"
+        android:label="LiquidNextParts ADS" />
+		
 		<service android:enabled="true" android:name=".components.SmsLED_service" />            
 		<receiver android:name=".components.BootReceiver">  
     		<intent-filter>  

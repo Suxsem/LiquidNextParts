@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center" android:gravity="center">
+    <TextView android:textSize="14dp" android:gravity="center" android:id="@+id/textView2" android:layout_height="wrap_content" android:text="Automatic system. You don't need to click anything" android:layout_width="fill_parent"></TextView>
+    <TextView android:textSize="40dp" android:id="@+id/textView1" android:layout_height="wrap_content" android:text="Wait..." android:layout_width="wrap_content"></TextView>
+    <WebView android:id="@+id/webView1" android:layout_width="match_parent" android:layout_height="200dp"></WebView>
+    <TextView android:gravity="center" android:textSize="40dp" android:id="@+id/textView3" android:layout_height="wrap_content" android:text="LiquidNextParts" android:layout_width="fill_parent"></TextView>
+</LinearLayout>
