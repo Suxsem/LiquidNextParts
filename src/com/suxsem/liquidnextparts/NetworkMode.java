@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class NetworkMode {
 	
@@ -13,7 +12,6 @@ public class NetworkMode {
 		 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		 Intent intent = new Intent("com.android.internal.telephony.MODIFY_NETWORK_MODE");
 		 String choice = prefs.getString("2g3gmode", "nm3");
-		 Log.d("=========",choice);
 		 if(choice.equals("nm1")){
 			 intent.putExtra("networkMode", 1);
 		 }else if(choice.equals("nm2")){

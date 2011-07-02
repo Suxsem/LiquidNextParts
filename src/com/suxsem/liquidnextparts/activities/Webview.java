@@ -29,7 +29,7 @@ public class Webview extends Activity {
 		setContentView(R.layout.webviewlayout);
 		waittextview = (TextView) findViewById(R.id.textView1);
 		waittextview.setText("Loading ADS...");
-		 final CountDownTimer timer2 = new CountDownTimer(5000, 3000) {
+		 final CountDownTimer timer2 = new CountDownTimer(6000, 6000) {
 
 				@Override
 				public void onFinish() {
@@ -45,7 +45,7 @@ public class Webview extends Activity {
 				}
 			 
 		 };
-			final CountDownTimer timer1 = new CountDownTimer(8000, 1000) {
+			final CountDownTimer timer1 = new CountDownTimer(20000, 1000) {
 
 				@Override
 				public void onFinish() {

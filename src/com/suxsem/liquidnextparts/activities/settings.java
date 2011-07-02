@@ -13,7 +13,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import com.suxsem.liquidnextparts.components.DownloadTask;
-import com.suxsem.liquidnextparts.components.SmsLED_service;
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.components.parsebuildprop;
 import com.suxsem.liquidnextparts.BatteryLED;
@@ -33,8 +32,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -44,7 +41,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -355,10 +351,6 @@ public class settings extends PreferenceActivity {
 		fixled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				if (fixled.isChecked()) {
-					Intent smsledservice = new Intent(getBaseContext(), SmsLED_service.class);
-					getBaseContext().startService(smsledservice);
-				}
 				return true;
 			}
 		});
@@ -438,8 +430,8 @@ public class settings extends PreferenceActivity {
 						android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 						if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
 								wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
-
-							final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+getString(R.string.lastversion),"Save as /sdcard/update"};
+							final String actualfilename = getString(R.string.lastversion).replaceAll(" ", "_");
+							final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+actualfilename,"Save as /sdcard/update"};
 
 							AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
 							builder.setTitle("Choose download location");
@@ -448,21 +440,23 @@ public class settings extends PreferenceActivity {
 									if (item == 0){
 										DownloadTaskInformations = DownloadTaskInformations + "/sdcard/LiquidNext_LastUpdate.zip";
 									}else if (item == 1){
-										DownloadTaskInformations = DownloadTaskInformations + "/sdcard/"+getString(R.string.lastversion)+".zip";
+										DownloadTaskInformations = DownloadTaskInformations + "/sdcard/"+actualfilename+".zip";
 									}else if (item == 2){
 										DownloadTaskInformations = DownloadTaskInformations + "/sdcard/update.zip";
 									}
-									final CharSequence[] items = {"Reboot in recovery after download", "Don't reboot in recovery after download"};
+									final CharSequence[] items = {"Automatically flash after download", "Reboot in recovery after download", "Don't reboot in recovery after download"};
 
 									AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
 									builder.setTitle("Choose action after download");
 									builder.setItems(items, new DialogInterface.OnClickListener() {
 										public void onClick(DialogInterface dialog, int item) {
 											if (item == 0){
-												DownloadTaskInformations = DownloadTaskInformations + "#r";
+												DownloadTaskInformations = DownloadTaskInformations + "#r1";
 											}else if (item == 1){
-												DownloadTaskInformations = DownloadTaskInformations + "#nr";
-											}                  	                                    	        
+												DownloadTaskInformations = DownloadTaskInformations + "#r2";
+											}else if (item == 2){
+												DownloadTaskInformations = DownloadTaskInformations + "#r3";
+											}
 											DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);
 											startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
 										}

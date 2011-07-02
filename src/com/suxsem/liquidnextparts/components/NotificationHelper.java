@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class NotificationHelper {
     private Context mContext;
@@ -62,7 +63,7 @@ public class NotificationHelper {
      * called when the background task is complete, this removes the notification from the status bar.
      * We could also use this to add a new ‘task complete’ notification
      */
-    public void completed(String options)    {
+    public void completed(String options, String updatefilelocation)    {
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
 
@@ -89,8 +90,15 @@ public class NotificationHelper {
             mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mNotification);	
     	}
-    	if(options.equals("r")){
+    	if(options.equals("r1")){
+    		String tempcommand = "--update_package=SDCARD:"+ updatefilelocation.substring(8,updatefilelocation.length());
+    		LiquidSettings.runRootCommand("echo \""+tempcommand+"\" > /cache/recovery/command");
+    		LiquidSettings.runRootCommand("echo 0 > /cache/recovery/lnpreboot");
     		LiquidSettings.runRootCommand("reboot recovery");
+    		
+    	}else if(options.equals("r2")){
+    		LiquidSettings.runRootCommand("reboot recovery");
+    	}else if(options.equals("r3")){  		
     	}
     }
     public void cancelled(String filename){

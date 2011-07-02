@@ -3,7 +3,6 @@ package com.suxsem.liquidnextparts;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
-import android.util.Log;
 
 public class SdCache {
 	
@@ -19,17 +18,14 @@ public class SdCache {
         	FileReader input = new FileReader("/sys/devices/virtual/bdi/179:0/read_ahead_kb");
         	BufferedReader reader = new BufferedReader(input);
         	value = reader.readLine();
-        	Log.d("LS-APP","Read sd cache value " + value);
         	reader.close();
         	input.close();
     	} catch (Exception e) {
-    		Log.d("*** DEBUG ***", "Unexpected error - Here is what I know: "+e.getMessage());
     		return 0;
     	}
         if (Strings.onlyNumber(value)){
         	return Integer.parseInt(value);
         }
-        Log.d("LS-APP", "Value read from SDCache is not numeric");
         return 0;
     }
 

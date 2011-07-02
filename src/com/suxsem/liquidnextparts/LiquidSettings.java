@@ -1,7 +1,6 @@
 package com.suxsem.liquidnextparts;
 
 import java.io.DataOutputStream;
-import android.util.Log;
 
 public class LiquidSettings {
 	
@@ -20,7 +19,6 @@ public class LiquidSettings {
 	                os.flush();
 	                process.waitFor();
 	                } catch (Exception e) {
-	                        Log.d("*** DEBUG ***", "Unexpected error - Here is what I know: "+e.getMessage());
 	                        return false;
 	                }
 	                finally {
@@ -42,7 +40,6 @@ public class LiquidSettings {
 	                os.flush();
 	                process.waitFor();
 	                } catch (Exception e) {
-	                        Log.d("*** DEBUG ***", "Unexpected error - Here is what I know: "+e.getMessage());
 	                        return false;
 	                }
 	                finally {

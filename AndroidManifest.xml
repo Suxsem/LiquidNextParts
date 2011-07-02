@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="16"
+      android:versionCode="17"
       android:installLocation="auto" android:versionName="@string/app_vname" package="com.suxsem.liquidnextparts">
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -26,8 +26,7 @@
         android:screenOrientation="portrait"
 		android:name=".activities.Webview"
         android:label="LiquidNextParts ADS" />
-		
-		<service android:enabled="true" android:name=".components.SmsLED_service" />            
+		         
 		<receiver android:name=".components.BootReceiver">  
     		<intent-filter>  
         		<action android:name="android.intent.action.BOOT_COMPLETED" />  
@@ -39,7 +38,7 @@
                             <action android:name="android.intent.action.PHONE_STATE"/>
                         </intent-filter> 
       	</receiver>
-    	<service android:enabled="true" android:name=".components.ProxService" />
+    	<service android:enabled="true" android:name=".components.main_service"></service>
 	</application>
         <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
         <uses-permission android:name="android.permission.WAKE_LOCK"/>

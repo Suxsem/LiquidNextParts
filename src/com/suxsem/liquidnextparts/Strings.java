@@ -1,7 +1,5 @@
 package com.suxsem.liquidnextparts;
 
-import android.util.Log;
-
 public class Strings {
 	public static String getnovibr(){
 		return String.format("%s\n%s\n%s\n%s", 
@@ -55,7 +53,6 @@ public class Strings {
 			Integer.parseInt(str);
 			return true;
 		} catch (NumberFormatException excp){
-			Log.e("Liquid-settings", excp.getMessage());
 			return false;
 		}
 	}
