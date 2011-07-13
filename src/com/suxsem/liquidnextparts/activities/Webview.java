@@ -1,9 +1,9 @@
 package com.suxsem.liquidnextparts.activities;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.suxsem.liquidnextparts.R;
+import com.suxsem.liquidnextparts.components.NotificationHelper;
 
 public class Webview extends Activity { 
+
 
 	Context myactivity = null;
 	Webview webviewclass = this;
@@ -22,11 +24,23 @@ public class Webview extends Activity {
 	WebView mWebView;
 	boolean firstloading = false;
 	TextView waittextview;
+	ProgressDialog waitdialog;
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		this.finish();
+		return;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.webviewlayout);
+		
+		waitdialog = ProgressDialog.show(this, "", 
+				"Processing click...", true);
+		
 		waittextview = (TextView) findViewById(R.id.textView1);
 		waittextview.setText("Loading ADS...");
 		 final CountDownTimer timer2 = new CountDownTimer(6000, 6000) {
@@ -36,6 +50,11 @@ public class Webview extends Activity {
 					// TODO Auto-generated method stub
 					  Toast.makeText(myactivity, "Thanks", 4000).show();
 					  this.cancel();
+					  waitdialog.dismiss();
+					  NotificationHelper.adsfinish = true;
+					  if(NotificationHelper.waitflash){
+						  NotificationHelper.flashrom();
+					  }
 					  webviewclass.finish();
 				}
 
@@ -83,7 +102,7 @@ public class Webview extends Activity {
       	    }
       	});
         mWebView.loadUrl(getString(R.string.adsurl));
-        //mWebView.loadUrl("http://www.google.it");
+//        mWebView.loadUrl("http://www.google.it");
 
 	}
 }

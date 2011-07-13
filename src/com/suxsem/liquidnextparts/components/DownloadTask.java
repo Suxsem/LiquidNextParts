@@ -59,7 +59,12 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
             String[] DownloadTaskInformations = url[1].split("#");
         	filelocation = DownloadTaskInformations[0];
         	gorecovery = DownloadTaskInformations[1];
-            String filename = filelocation;
+        	String filename;
+        	if (gorecovery.equals("r1")){
+        	filename = "/sdcard/LiquidNext_autoflash.zip";
+        	}else{
+            filename = filelocation;
+        	}
             {
             	
                 conn     = (HttpURLConnection) new URL(url[0]).openConnection();

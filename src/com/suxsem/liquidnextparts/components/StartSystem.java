@@ -22,7 +22,7 @@ public class StartSystem {
 		if(prefs.getBoolean("firststart", true)){
 			Editor editor = prefs.edit();
 			editor.putBoolean("firststart", false);
-			editor.putBoolean("fixled", true);
+//			editor.putBoolean("fixled", true);
 			editor.putBoolean("fixsms", false);
 			editor.putBoolean("fixcall", true);
 			editor.putBoolean("noprox", false);
@@ -57,7 +57,7 @@ public class StartSystem {
 	}
 	private void firstflash(Context context){
 		LSystem.RemountRW();
-		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "18")+" > /system/etc/init.d/06sensitivity");
+		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16")+" > /system/etc/init.d/06sensitivity");
 		LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 		LSystem.RemountROnly();
 		LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
@@ -71,7 +71,7 @@ public class StartSystem {
 		CharSequence tickerText = "System need a REBOOT"; //Initial text that appears in the status bar
 		long when = System.currentTimeMillis();
 		Notification mNotification = new Notification(icon, tickerText, when);
-		String mContentTitle = "System need a REBOOT"; //Full title of the notification in the pull down
+		String mContentTitle = "System needs a REBOOT"; //Full title of the notification in the pull down
 		CharSequence contentText = "because it has just been configured"; //Text of the notification in the pull down
 		Intent notificationIntent = new Intent();
 		PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);

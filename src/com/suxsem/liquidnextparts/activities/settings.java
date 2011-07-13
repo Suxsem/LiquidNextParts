@@ -53,12 +53,19 @@ public class settings extends PreferenceActivity {
 		inflater.inflate(R.menu.inflatedmenu, menu);
 		return true;
 	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		this.finish();
+		return;
+	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.menu_help:
-			startActivity(new Intent (Intent.ACTION_VIEW).setClassName(this, InfoPreferenceActivity.class.getName()));
+			showhelp();
 			return true;
 		case R.id.menu_close:
 			this.finish();
@@ -97,14 +104,16 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
-		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
+//		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
 		final CheckBoxPreference noprox = (CheckBoxPreference)findPreference("noprox");
 		final Preference menu_info = findPreference("menu_info");
 		final Preference diskspace = findPreference("diskspace");
 		final Preference hotreboot = findPreference("hotreboot");
 		final Preference forceupdate = findPreference("forceupdate");
+		final Preference donateclick = findPreference("donateclick");
 		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
-
+		
+		noprox.setChecked((parsebuildprop.parseInt("hw.acer.psensor_calib_min_base")==32717));
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
 		editSoftsens = (EditTextPreference)findPreference("softsens");
@@ -250,13 +259,21 @@ public class settings extends PreferenceActivity {
 		menu_info.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				Intent myintent = new Intent (Intent.ACTION_VIEW);
-				myintent.setClassName(context, InfoPreferenceActivity.class.getName());
-				startActivity(myintent);
+				showhelp();
 				return true;
 			}
 		});
 
+		donateclick.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(context, Webview.class.getName());
+				startActivity(myintent);
+				return true;
+			}
+		});
+		
 		diskspace.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -348,12 +365,13 @@ public class settings extends PreferenceActivity {
 			}
 		});
 
-		fixled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			public boolean onPreferenceClick(Preference preference) {
-				return true;
-			}
-		});
+//		fixled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//
+//			public boolean onPreferenceClick(Preference preference) {
+//				return true;
+//			}
+//		});
+		
 		noprox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -382,6 +400,12 @@ public class settings extends PreferenceActivity {
 		});
 		checkupdates();
 	}
+	
+	private void showhelp(){
+		Intent myintent = new Intent (Intent.ACTION_VIEW);
+		myintent.setClassName(myactivity, InfoPreferenceActivity.class.getName());
+		startActivity(myintent);	
+	}
 
 
 
@@ -394,7 +418,15 @@ public class settings extends PreferenceActivity {
 	private boolean updaterom(){
 		String romodversion = parsebuildprop.parseString("ro.modversion");
 		String lastversion = getString(R.string.lastversion);
-		String[] romodversioncheckarray = romodversion.split("[\\s,]+")[1].split("\\.");
+		String[] romodversioncheckarray;
+		try {
+			romodversioncheckarray = romodversion.split("[\\s,]+")[1].split("\\.");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(myactivity, "ERROR in build.prop > ro.modversion", 4000).show();
+			return false;
+		}
 		String[] lastversioncheckarray = lastversion.split("[\\s,]+")[1].split("\\.");
 		Integer romodversioncheckarraynumber = 0;
 		Integer lastversioncheckarraynumber = 0;
@@ -431,6 +463,8 @@ public class settings extends PreferenceActivity {
 						if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
 								wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
 							final String actualfilename = getString(R.string.lastversion).replaceAll(" ", "_");
+							
+							
 							final CharSequence[] items = {"Save as /sdcard/LiquidNext_LastUpdate", "Save as /sdcard/"+actualfilename,"Save as /sdcard/update"};
 
 							AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
@@ -444,6 +478,7 @@ public class settings extends PreferenceActivity {
 									}else if (item == 2){
 										DownloadTaskInformations = DownloadTaskInformations + "/sdcard/update.zip";
 									}
+									
 									final CharSequence[] items = {"Automatically flash after download", "Reboot in recovery after download", "Don't reboot in recovery after download"};
 
 									AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
@@ -457,14 +492,17 @@ public class settings extends PreferenceActivity {
 											}else if (item == 2){
 												DownloadTaskInformations = DownloadTaskInformations + "#r3";
 											}
+
 											DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);
 											startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
 										}
 									});
 									builder.create().show();
+									
+									
 								}
 							});
-							builder.create().show();
+							builder.create().show();							
 						}else{
 							Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 4000).show();
 						}

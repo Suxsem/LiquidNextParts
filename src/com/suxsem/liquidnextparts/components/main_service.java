@@ -51,11 +51,10 @@ public class main_service extends Service {
 
 		public void onReceive(Context context, Intent intent) {
 
-			if(prefs.getBoolean("fixled", false)){                
+//			if(prefs.getBoolean("fixled", false)){                
 				if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {            	
-
 					if(call){
-						LiquidSettings.runRootCommand("echo 50 > /sys/devices/platform/i2c-adapter/i2c-0/0-0066/threshold");
+						//LiquidSettings.runRootCommand("echo 50 > /sys/devices/platform/i2c-adapter/i2c-0/0-0066/threshold");
 					}
 					
 					
@@ -126,7 +125,7 @@ public class main_service extends Service {
 						Log.d("LS","RE");
 					}*/
 					if(call){
-						LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
+						//LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
 					}
 					
 					if(prefs.getBoolean("bottomled", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/bottom");
@@ -136,10 +135,10 @@ public class main_service extends Service {
 				if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
 					if(prefs.getBoolean("bottomled", false)) LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
 				}
-			}else{
-				terminaservizio();
-				unregisterReceiver(this);
-			}
+//			}else{
+//				terminaservizio();
+//				unregisterReceiver(this);
+//			}
 
 		}
 	};
@@ -168,14 +167,13 @@ public class main_service extends Service {
 		/*connManager =  (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);		
 		wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);*/
 		LiquidSettings.runRootCommand("echo 0 > /data/system/mail_led && chmod 777 /data/system/mail_led"); 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if(!prefs.getBoolean("fixled", false)){terminaservizio();return;}
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);		
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		this.registerReceiver(mIntentReceiver, filter, null, mHandler);
-		LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
+		//LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
 	}
 	public void terminaservizio(){
 		LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");
@@ -210,7 +208,7 @@ public class main_service extends Service {
 	}
 	public static void stopcall(){
 			call = false;
-			LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
+			//LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
 			try {
 				wakelockcall.release();
 			} catch (Exception e) {

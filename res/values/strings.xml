@@ -16,8 +16,7 @@
 <string name="haptic_help">Haptic feedback is the vibrate feedback issued by pressing the softkeys.</string>
 <string name="sdcache_help">SD Cache improves the speed of your SD card. The value must be between 128 and 4096. Reccomended value: 2048.</string>
 <string name="disablebattery_help">Disable battery led when a USB cable is connected. When unchecked remove and reinsert USB cable to enable battery led.</string>
-<string name="fixsmscall_help">Required to fix sms and call LEDs (service: drain a little more battery than normal).</string>
-<string name="softkeynotification_help">Use softkey led as new sms notification led (service: drain more battery than normal).</string>
+<string name="softkeynotification_help">Use softkey led as new sms notification led (drain a little more battery than normal).</string>
 <array name="nma">
                 <item>2G only</item>
                 <item>3g only</item>
