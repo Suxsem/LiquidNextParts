@@ -86,9 +86,24 @@
 	<Preference
             android:key="forceupdate"
             android:title="Force ROM update"
-            android:summary="Force ROM updates check" />                 
+            android:summary="Force ROM updates check" />
+	<CheckBoxPreference
+                android:key="updateonstart"           
+                android:title="Update on start"
+                android:summary="Check for updates on app start" />                          
    	<Preference android:title="Info and help" 
    					android:key="menu_info" 
    					android:summary="About this app" />
+   	</PreferenceCategory>
+	<PreferenceCategory
+            android:title="Reset">   					
+	<CheckBoxPreference
+                android:key="enableresetall"           
+                android:title="Enable reset all"
+                android:summary="Enable reset all button (below)" />                          
+   	<Preference android:title="RESET ALL SETTINGS"
+   					android:dependency="enableresetall" 
+   					android:key="resetall"
+   					android:summary="Reset all LNP settings + ROM fixes" />     					   				
 	</PreferenceCategory>   					
 </PreferenceScreen>

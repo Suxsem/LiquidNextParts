@@ -17,18 +17,19 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 
 public class StartSystem {
-	public void startsystem(boolean forcenewflash, Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);        	        	
+	public void startsystem(Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor editor = prefs.edit();
+		editor.putBoolean("firststart", prefs.getBoolean("firststart", true));
+//		editor.putBoolean("fixled", true);
+		editor.putBoolean("fixsms", prefs.getBoolean("fixsms", false));
+		editor.putBoolean("fixcall", prefs.getBoolean("fixcall", true));
+		editor.putBoolean("noprox", prefs.getBoolean("noprox", false));
+		editor.putBoolean("updateonstart",prefs.getBoolean("updateonstart", true));
+		editor.putString("2g3gmode", prefs.getString("2g3gmode", "nm3"));
+		editor.commit();
 		if(prefs.getBoolean("firststart", true)){
-			Editor editor = prefs.edit();
 			editor.putBoolean("firststart", false);
-//			editor.putBoolean("fixled", true);
-			editor.putBoolean("fixsms", false);
-			editor.putBoolean("fixcall", true);
-			editor.putBoolean("noprox", false);
-			editor.putString("2g3gmode", "nm3");
-			editor.commit();
-
 			int icon = android.R.drawable.stat_sys_warning;
 			CharSequence tickerText = "Welcome to LiquidNext!"; //Initial text that appears in the status bar
 			long when = System.currentTimeMillis();
@@ -47,7 +48,6 @@ public class StartSystem {
 		
 		String firstflash = prefs.getString("firstflash", "0");
 		if(!firstflash.equals(context.getString(R.string.firstflashincremental))){			
-			Editor editor = prefs.edit();
 			editor.putString("firstflash", context.getString(R.string.firstflashincremental));
 			editor.commit();
 			firstflash(context);

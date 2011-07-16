@@ -1,8 +1,6 @@
-package com.suxsem.liquidnextparts.components;
+package com.suxsem.liquidnextparts;
 
 import java.io.*;
-import com.suxsem.liquidnextparts.LSystem;
-import com.suxsem.liquidnextparts.LiquidSettings;
 
 public class parsebuildprop {
         private static String build_prop = "/system/build.prop";

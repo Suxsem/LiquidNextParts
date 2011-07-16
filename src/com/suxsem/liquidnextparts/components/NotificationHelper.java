@@ -1,14 +1,15 @@
 package com.suxsem.liquidnextparts.components;
 
-import java.io.File;
-
 import com.suxsem.liquidnextparts.LiquidSettings;
+import com.suxsem.liquidnextparts.R;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
+import com.suxsem.liquidnextparts.components.DownloadTask;
 
 public class NotificationHelper {
     private static Context mContext;
@@ -21,6 +22,8 @@ public class NotificationHelper {
     public static boolean waitflash = false;
     private static String options_final = "";
     private static String updatefilelocation_final = "";
+    private static CountDownTimer reconnectiontimer;
+    private String arg;
     public NotificationHelper(Context context)
     {
         mContext = context;
@@ -38,7 +41,7 @@ public class NotificationHelper {
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
         mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-        CharSequence contentText = "0% complete - Click to cancel"; //Text of the notification in the pull down
+        CharSequence contentText = "Starting... - Click to cancel"; //Text of the notification in the pull down
         //Intent notificationIntent = new Intent();
         //mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
         
@@ -67,13 +70,14 @@ public class NotificationHelper {
      * called when the background task is complete, this removes the notification from the status bar.
      * We could also use this to add a new ‘task complete’ notification
      */
-    public void completed(String options, String updatefilelocation)    {
+    public void completed(boolean error, String options, String updatefilelocation, String partialfilelocation)    {
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
-        
-        if(!options.equals("error")){
+        arg = updatefilelocation + "#" + options + "#" + partialfilelocation;
+        if(!error){
         	options_final = options;
         	updatefilelocation_final = updatefilelocation;
+            LiquidSettings.runRootCommand("mv -f "+partialfilelocation+" "+updatefilelocation);
         	if(adsfinish){        	
         	flashrom();
         	}else{
@@ -93,29 +97,50 @@ public class NotificationHelper {
             long when = System.currentTimeMillis();
             mNotification = new Notification(android.R.drawable.stat_sys_download_done, tickerText, when);
             mContentTitle = "Download ROM ERROR"; //Full title of the notification in the pull down
-            CharSequence contentText = "Download the update again"; //Text of the notification in the pull down        
-            Intent notificationIntent = new Intent();
-            mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+            CharSequence contentText = "Reconnecting in 10 seconds..."; //Text of the notification in the pull down        
+                                
+            Intent intent = new Intent(mContext, NotificationHelperStopProcess.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+            mContentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+            mNotification.flags = Notification.FLAG_ONGOING_EVENT;
             mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+            reconnectiontimer = new CountDownTimer(10000, 1000) {
+
+				@Override
+				public void onFinish() {
+					// TODO Auto-generated method stub
+					  DownloadTask.downloadtask = new DownloadTask(mContext).execute(mContext.getString(R.string.url), arg);
+					  this.cancel();
+				}
+
+				@Override
+				public void onTick(long millisUntilFinished) {
+			        CharSequence contentText = "Reconnecting in "+(millisUntilFinished/1000)+" seconds...";
+			        //publish it to the status bar
+			        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+			        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+					// TODO Auto-generated method stub
+				}
+   			}.start();
     	}
     }
-    public void cancelled(String filename){
+    public static void cancelled(){
+    	reconnectiontimer.cancel();
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
-
         int icon = android.R.drawable.stat_sys_download_done;
-        CharSequence tickerText = "Download completed"; //Initial text that appears in the status bar
+        CharSequence tickerText = "Download cancelled"; //Initial text that appears in the status bar
         long when = System.currentTimeMillis();
         mNotification = new Notification(icon, tickerText, when);
         mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-        CharSequence contentText = "Download cancelled and file removed"; //Text of the notification in the pull down
+        CharSequence contentText = "Download cancelled by user"; //Text of the notification in the pull down
         Intent notificationIntent = new Intent();
         mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
         mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-        File file = new File(filename);
-        file.delete();
+        /*File file = new File(filename);
+        file.delete();*/
     }
     public static void flashrom(){
     	CharSequence tickerText = "Download completed"; //Initial text that appears in the status bar
@@ -138,6 +163,20 @@ public class NotificationHelper {
     		LiquidSettings.runRootCommand("reboot recovery");
     	}else if(options_final.equals("r3")){  		
     	}
+    }
+    public static void closeclass(){
+    	try {
+			cancelled();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	try {
+			DownloadTask.downloadtask.cancel(true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
     }
 
 }
