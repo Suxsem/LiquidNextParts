@@ -16,6 +16,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import com.suxsem.liquidnextparts.activities.Webview;
 import com.suxsem.liquidnextparts.activities.settings;
 import com.suxsem.liquidnextparts.components.DownloadTask;
 
@@ -135,12 +136,12 @@ public class OTA_updates {
 														if (item == 1){
 															LiquidSettings.runRootCommand("rm -f "+"/sdcard/"+actualfilename+".PARTIALDOWNLOAD");										
 														}
-														startdownload();
+														startdownload(myactivity);
 													}
 												});
 												builder.create().show();               
 							                }else{							                												
-												startdownload();
+												startdownload(myactivity);
 							                }
 											
 										}
@@ -280,8 +281,8 @@ public class OTA_updates {
 		}.start();		   
 	}
 	
-	private void startdownload(){
+	private void startdownload(Context myactivity){
 		DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);
-		//startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
+		myactivity.startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
 	}
 }
