@@ -34,12 +34,20 @@ public class OTA_updates_status extends Activity{
 			Button Cancel = (Button)findViewById(R.id.button1);
 			Button CancelAndDelete = (Button)findViewById(R.id.button2);
 			Button Close = (Button)findViewById(R.id.button3);
+			Button PauseResume = (Button)findViewById(R.id.button4);
+			
 			progressbar = (ProgressBar)findViewById(R.id.progressBar1);
 			progressbar.setMax(100);
 			infoprogressbar = (TextView)findViewById(R.id.textView1);
 			
 			progressbar.setProgress(DownloadTask.previousperc);
 			infoprogressbar.setText("Downloaded " + (int)(DownloadTask.downloaded/1000000) +" MB of " + (int)(DownloadTask.fileSize/1000000) + " MB ("+DownloadTask.previousperc+"%)");
+			
+			if(NotificationHelper.ispaused){
+				PauseResume.setText("Resume download");
+			}else{
+				PauseResume.setText("Pause download");
+			}
 			
 			Cancel.setOnClickListener(new OnClickListener(){
 				@Override
@@ -64,6 +72,20 @@ public class OTA_updates_status extends Activity{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					myactivity.finish();
+				}
+			});
+			PauseResume.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(NotificationHelper.ispaused){
+						NotificationHelper.ispaused = false;
+						DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), NotificationHelper.arg);
+					}else{
+						NotificationHelper.ispaused = true;
+						DownloadTask.downloadtask.cancel(true);
+						NotificationHelper.cancelled();
+					}
 				}
 			});
     }

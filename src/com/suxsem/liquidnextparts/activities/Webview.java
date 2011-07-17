@@ -76,6 +76,21 @@ public class Webview extends Activity {
    			 
    		 };
 		
+			final CountDownTimer timer_timeout = new CountDownTimer(20000, 20000) {
+
+				@Override
+				public void onFinish() {
+					Toast.makeText(myactivity, "Network error", 4000).show();
+					webviewclass.finish();
+				}
+
+				@Override
+				public void onTick(long millisUntilFinished) {
+					// TODO Auto-generated method stub				      
+				}
+   			 
+   		 };
+   		 
 		myactivity = this.getBaseContext();
 		mWebView = (WebView) findViewById(R.id.webView1);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -87,6 +102,12 @@ public class Webview extends Activity {
       		 runOnUiThread(new Runnable() {
 					public void run() {
 						if(!firstloading){
+						try {
+							timer_timeout.cancel();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						timer1.start();
 						firstloading = true;
 						}
@@ -96,6 +117,7 @@ public class Webview extends Activity {
       	});
         mWebView.loadUrl(getString(R.string.adsurl));
 //        mWebView.loadUrl("http://www.google.it");
+        timer_timeout.start();
 
 	}
 }

@@ -100,6 +100,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			while (status == DOWNLOADING)
 			{
 				if (isCancelled()){
+					NotificationHelper.arg = filelocation + "#" + gorecovery + "#" + partialfilelocation;
 					NotificationHelper.cancelled();
 					break;                        	
 				}
@@ -203,7 +204,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		}else{
 			error = true; 		
 		}
-		mNotificationHelper.completed(error,gorecovery,filelocation,partialfilelocation);
+		NotificationHelper.arg = filelocation + "#" + gorecovery + "#" + partialfilelocation;		
+		mNotificationHelper.completed(error);
 		// do something
 	}
 }

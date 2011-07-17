@@ -16,17 +16,17 @@ import com.suxsem.liquidnextparts.components.DownloadTask;
 
 public class NotificationHelper {
     private static Context mContext;
-    private static int NOTIFICATION_ID = 1;
+    private static int NOTIFICATION_ID = 4;
     private static Notification mNotification;
     private static NotificationManager mNotificationManager;
     private static PendingIntent mContentIntent;
-    private static CharSequence mContentTitle;
     public static boolean adsfinish = false;
     public static boolean waitflash = false;
     private static String options_final = "";
     private static String updatefilelocation_final = "";
     private static CountDownTimer reconnectiontimer;
-    private String arg;
+    public static String arg;
+    public static boolean ispaused = false;
     private static RemoteViews contentView;
     public NotificationHelper(Context context)
     {
@@ -43,7 +43,8 @@ public class NotificationHelper {
     			android.R.drawable.stat_sys_download,
     			"Download ROM update",
     			"Starting... - Click for options",
-    			Notification.FLAG_ONGOING_EVENT);
+    			Notification.FLAG_ONGOING_EVENT,
+    			true);
     }
 
     /**
@@ -61,40 +62,31 @@ public class NotificationHelper {
      * called when the background task is complete, this removes the notification from the status bar.
      * We could also use this to add a new ‘task complete’ notification
      */
-    public void completed(boolean error, String options, String updatefilelocation, String partialfilelocation)    {
+    public void completed(boolean error) {
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
-        arg = updatefilelocation + "#" + options + "#" + partialfilelocation;
         if(!error){
-        	options_final = options;
-        	updatefilelocation_final = updatefilelocation;
-            LiquidSettings.runRootCommand("mv -f "+partialfilelocation+" "+updatefilelocation);
+        	options_final = arg.split("#")[1];
+        	updatefilelocation_final = arg.split("#")[0];
+            LiquidSettings.runRootCommand("mv -f "+arg.split("#")[2]+" "+arg.split("#")[0]);
         	if(adsfinish){        	
         	flashrom();
         	}else{
         		waitflash = true;
-                createnotification("Download ROM ERROR",
-                		android.R.drawable.stat_sys_download_done,
-                		"Download ROM ERROR",
-                		"Reconnecting in 10 seconds...",
-                		Notification.FLAG_ONGOING_EVENT); 
-                
-        		CharSequence tickerText = "Waiting ads..."; //Initial text that appears in the status bar
-            	long when = System.currentTimeMillis();
-            	mNotification = new Notification(android.R.drawable.stat_sys_download, tickerText, when);
-            	mContentTitle = "Waiting ads..."; //Full title of the notification in the pull down
-            	CharSequence contentText = "Waiting ads..."; //Text of the notification in the pull down        
-            	Intent notificationIntent = new Intent();
-            	mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-            	mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-            	mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+                createnotification("Waiting ads...",
+                		android.R.drawable.stat_sys_download,
+                		"Download ROM update",
+                		"Waiting ads...",
+                		Notification.FLAG_AUTO_CANCEL,
+                		false);                
         	}
         }else{
             createnotification("Download ROM ERROR",
             		android.R.drawable.stat_sys_download_done,
-            		"Download ROM ERROR",
-            		"Reconnecting in 10 seconds...",
-            		Notification.FLAG_ONGOING_EVENT); 
+            		"Download ROM update",
+            		"ERROR - Reconnecting in 10 seconds...",
+            		Notification.FLAG_ONGOING_EVENT,
+            		true); 
             reconnectiontimer = new CountDownTimer(10000, 1000) {
 
 				@Override
@@ -106,11 +98,10 @@ public class NotificationHelper {
 
 				@Override
 				public void onTick(long millisUntilFinished) {
-			        CharSequence contentText = "Reconnecting in "+(millisUntilFinished/1000)+" seconds...";
-			        //publish it to the status bar
-			        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+					contentView.setTextViewText(R.id.notification_layout_text2, "ERROR - Reconnecting in "+(millisUntilFinished/1000)+" seconds...");
+			        mNotification.contentView = contentView;
+			        mNotification.contentIntent = mContentIntent;
 			        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-					// TODO Auto-generated method stub
 				}
    			}.start();
     	}
@@ -124,18 +115,30 @@ public class NotificationHelper {
 		}
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
+        if(!ispaused){
         createnotification("Download cancelled",
         		android.R.drawable.stat_sys_download_done,
         		"Download ROM update",
         		"Download cancelled by user",
-        		Notification.FLAG_AUTO_CANCEL);       
+        		Notification.FLAG_AUTO_CANCEL,
+        		false);
+        }else{
+        createnotification("Download paused",
+            		android.R.drawable.stat_sys_download_done,
+            		"Download ROM update",
+            		"Download paused by user",
+            		Notification.FLAG_ONGOING_EVENT,
+            		true);
+        }
     }
+    
     public static void flashrom(){
     	createnotification("Download completed",
     			android.R.drawable.stat_sys_download_done,
     			"Download ROM update",
     			"Now flash zip from recovery",
-    			Notification.FLAG_AUTO_CANCEL);
+    			Notification.FLAG_AUTO_CANCEL,
+    			false);
     	if(options_final.equals("r1")){
     		//String tempcommand = "--update_package=SDCARD:"+ updatefilelocation.substring(8,updatefilelocation.length());
     		String tempcommand = "--update_package=SDCARD:LiquidNext_autoflash.zip";
@@ -162,11 +165,16 @@ public class NotificationHelper {
 			e.printStackTrace();
 		}		
     }
-    public static void createnotification(CharSequence tickerText,int icon, String text1, String text2, int flag){
+    public static void createnotification(CharSequence tickerText,int icon, String text1, String text2, int flag, boolean showintent){
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);                
-        Intent intent = new Intent(mContext, OTA_updates_status.class);
+        mNotification = new Notification(icon, tickerText, when);
+        Intent intent;
+        if(showintent){
+        intent = new Intent(mContext, OTA_updates_status.class);
+        }else{
+        intent = new Intent();
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
         mContentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
         contentView = new RemoteViews(mContext.getPackageName(), R.layout.notification_custom_layout);
