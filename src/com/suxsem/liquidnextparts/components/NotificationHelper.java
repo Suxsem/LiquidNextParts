@@ -9,6 +9,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.widget.RemoteViews;
+
+import com.suxsem.liquidnextparts.activities.OTA_updates_status;
 import com.suxsem.liquidnextparts.components.DownloadTask;
 
 public class NotificationHelper {
@@ -24,6 +27,7 @@ public class NotificationHelper {
     private static String updatefilelocation_final = "";
     private static CountDownTimer reconnectiontimer;
     private String arg;
+    private static RemoteViews contentView;
     public NotificationHelper(Context context)
     {
         mContext = context;
@@ -35,23 +39,11 @@ public class NotificationHelper {
     public void createNotification() {
     	waitflash = false;
     	adsfinish = false;
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        int icon = android.R.drawable.stat_sys_download;
-        CharSequence tickerText = "Starting download..."; //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
-        mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-        CharSequence contentText = "Starting... - Click to cancel"; //Text of the notification in the pull down
-        //Intent notificationIntent = new Intent();
-        //mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-        
-        
-        Intent intent = new Intent(mContext, NotificationHelperStopProcess.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-        mContentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+    	createnotification("Starting download...",
+    			android.R.drawable.stat_sys_download,
+    			"Download ROM update",
+    			"Starting... - Click for options",
+    			Notification.FLAG_ONGOING_EVENT);
     }
 
     /**
@@ -59,10 +51,9 @@ public class NotificationHelper {
      * @param percentageComplete
      */
     public void progressUpdate(int percentageComplete) {
-        //build up the new status message
-        CharSequence contentText = percentageComplete + "% complete - Click to cancel";
-        //publish it to the status bar
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+        contentView.setTextViewText(R.id.notification_layout_text2, percentageComplete + "% complete - Click to cancel");
+        mNotification.contentView = contentView;
+        mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
     }
 
@@ -82,6 +73,12 @@ public class NotificationHelper {
         	flashrom();
         	}else{
         		waitflash = true;
+                createnotification("Download ROM ERROR",
+                		android.R.drawable.stat_sys_download_done,
+                		"Download ROM ERROR",
+                		"Reconnecting in 10 seconds...",
+                		Notification.FLAG_ONGOING_EVENT); 
+                
         		CharSequence tickerText = "Waiting ads..."; //Initial text that appears in the status bar
             	long when = System.currentTimeMillis();
             	mNotification = new Notification(android.R.drawable.stat_sys_download, tickerText, when);
@@ -93,18 +90,11 @@ public class NotificationHelper {
             	mNotificationManager.notify(NOTIFICATION_ID, mNotification);
         	}
         }else{
-            CharSequence tickerText = "Download ROM ERROR"; //Initial text that appears in the status bar
-            long when = System.currentTimeMillis();
-            mNotification = new Notification(android.R.drawable.stat_sys_download_done, tickerText, when);
-            mContentTitle = "Download ROM ERROR"; //Full title of the notification in the pull down
-            CharSequence contentText = "Reconnecting in 10 seconds..."; //Text of the notification in the pull down        
-                                
-            Intent intent = new Intent(mContext, NotificationHelperStopProcess.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-            mContentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-            mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-            mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+            createnotification("Download ROM ERROR",
+            		android.R.drawable.stat_sys_download_done,
+            		"Download ROM ERROR",
+            		"Reconnecting in 10 seconds...",
+            		Notification.FLAG_ONGOING_EVENT); 
             reconnectiontimer = new CountDownTimer(10000, 1000) {
 
 				@Override
@@ -126,32 +116,26 @@ public class NotificationHelper {
     	}
     }
     public static void cancelled(){
-    	reconnectiontimer.cancel();
+    	try {
+			reconnectiontimer.cancel();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
-        int icon = android.R.drawable.stat_sys_download_done;
-        CharSequence tickerText = "Download cancelled"; //Initial text that appears in the status bar
-        long when = System.currentTimeMillis();
-        mNotification = new Notification(icon, tickerText, when);
-        mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-        CharSequence contentText = "Download cancelled by user"; //Text of the notification in the pull down
-        Intent notificationIntent = new Intent();
-        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
-        /*File file = new File(filename);
-        file.delete();*/
+        createnotification("Download cancelled",
+        		android.R.drawable.stat_sys_download_done,
+        		"Download ROM update",
+        		"Download cancelled by user",
+        		Notification.FLAG_AUTO_CANCEL);       
     }
     public static void flashrom(){
-    	CharSequence tickerText = "Download completed"; //Initial text that appears in the status bar
-    	long when = System.currentTimeMillis();
-    	mNotification = new Notification(android.R.drawable.stat_sys_download_done, tickerText, when);
-    	mContentTitle = "Download ROM update"; //Full title of the notification in the pull down
-    	CharSequence contentText = "Now flash zip from recovery"; //Text of the notification in the pull down        
-    	Intent notificationIntent = new Intent();
-    	mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-    	mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-    	mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+    	createnotification("Download completed",
+    			android.R.drawable.stat_sys_download_done,
+    			"Download ROM update",
+    			"Now flash zip from recovery",
+    			Notification.FLAG_AUTO_CANCEL);
     	if(options_final.equals("r1")){
     		//String tempcommand = "--update_package=SDCARD:"+ updatefilelocation.substring(8,updatefilelocation.length());
     		String tempcommand = "--update_package=SDCARD:LiquidNext_autoflash.zip";
@@ -177,6 +161,22 @@ public class NotificationHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+    }
+    public static void createnotification(CharSequence tickerText,int icon, String text1, String text2, int flag){
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        long when = System.currentTimeMillis();
+        mNotification = new Notification(icon, tickerText, when);                
+        Intent intent = new Intent(mContext, OTA_updates_status.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+        mContentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+        contentView = new RemoteViews(mContext.getPackageName(), R.layout.notification_custom_layout);
+        contentView.setImageViewResource(R.id.notification_layout_image, R.drawable.icon);
+        contentView.setTextViewText(R.id.notification_layout_text1, text1);
+        contentView.setTextViewText(R.id.notification_layout_text2, text2);
+        mNotification.contentView = contentView;
+        mNotification.contentIntent = mContentIntent;
+        mNotification.flags = flag;
+        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
     }
 
 }

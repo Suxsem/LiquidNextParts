@@ -25,13 +25,6 @@ public class Webview extends Activity {
 	boolean firstloading = false;
 	TextView waittextview;
 	ProgressDialog waitdialog;
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		this.finish();
-		return;
-	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 

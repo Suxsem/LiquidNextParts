@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="3dp" android:orientation="horizontal" android:gravity="center_vertical">
+    <ImageView android:id="@+id/notification_layout_image"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:layout_marginRight="10dp"
+              />
+    <LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout1" android:layout_height="match_parent" android:gravity="center_vertical" android:orientation="vertical">
+        <TextView android:text="TextView" android:textColor="#000" android:id="@+id/notification_layout_text1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold"></TextView>
+        <TextView android:text="TextView" android:textColor="#000" android:id="@+id/notification_layout_text2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    </LinearLayout>
+</LinearLayout>

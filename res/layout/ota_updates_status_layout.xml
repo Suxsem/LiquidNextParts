@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center">
+    <TextView android:layout_margin="10dp" android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="Loading..."></TextView>
+    <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:id="@+id/progressBar1" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_margin="10dp"></ProgressBar>
+    <Button android:id="@+id/button1" android:text="Cancel download" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp"></Button>
+    <Button android:id="@+id/button2" android:text="Cancel and delete temporary file (you will not able to resume the download)" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="10dp"></Button>
+    <Button android:id="@+id/button3" android:layout_margin="10dp" android:text="Close this window" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+</LinearLayout>

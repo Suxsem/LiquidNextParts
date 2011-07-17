@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import com.suxsem.liquidnextparts.activities.OTA_updates_status;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -20,9 +23,9 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 	private InputStream stream; //to read
 	private ByteArrayOutputStream out; //to write
 
-	private double fileSize;
+	public static double fileSize;
 	private double localFileSize;
-	private double downloaded; // number of bytes downloaded
+	public static double downloaded; // number of bytes downloaded
 	private int status = DOWNLOADING; //status of current process
 
 	private static final int MAX_BUFFER_SIZE = 3000000; //bytes
@@ -31,7 +34,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 	private String filelocation = "";
 	private String gorecovery = "";
 	private String partialfilelocation = "";
-	private Integer previousperc = 0;
+	public static Integer previousperc = 0;
 	static NotificationHelper mNotificationHelper;
 	@SuppressWarnings("unchecked")
 	public static AsyncTask downloadtask;
@@ -39,9 +42,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		mNotificationHelper = new NotificationHelper(context);        
 	}
 
-	public static void stopdownload(){
-
-	}
 	public void DownloadManager()
 	{
 		d          = null;
@@ -169,7 +169,13 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 	@Override
 	protected void onProgressUpdate(Integer... progress)
 	{
-
+		try {
+			OTA_updates_status.progressbar.setProgress(previousperc);
+			OTA_updates_status.infoprogressbar.setText("Downloaded " + (int)(downloaded/1000000) +" MB of " + (int)(fileSize/1000000) + " MB ("+previousperc+"%)");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mNotificationHelper.progressUpdate(previousperc);
 
 	}
