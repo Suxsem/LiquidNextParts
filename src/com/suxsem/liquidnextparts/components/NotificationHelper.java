@@ -52,7 +52,7 @@ public class NotificationHelper {
      * @param percentageComplete
      */
     public void progressUpdate(int percentageComplete) {
-        contentView.setTextViewText(R.id.notification_layout_text2, percentageComplete + "% complete - Click to cancel");
+        contentView.setTextViewText(R.id.notification_layout_text2, percentageComplete + "% complete - Click to options");
         mNotification.contentView = contentView;
         mNotification.contentIntent = mContentIntent;
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
@@ -130,6 +130,24 @@ public class NotificationHelper {
             		Notification.FLAG_ONGOING_EVENT,
             		true);
         }
+    }
+    
+    public static void urlDecodeError(){
+    	try {
+			reconnectiontimer.cancel();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //remove the notification from the status bar
+        mNotificationManager.cancel(NOTIFICATION_ID);
+
+        createnotification("Download ROM ERROR",
+        		android.R.drawable.stat_sys_download_done,
+        		"Download ROM update",
+        		"Failed to decode download URL",
+        		Notification.FLAG_AUTO_CANCEL,
+        		false);        
     }
     
     public static void flashrom(){

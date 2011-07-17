@@ -22,24 +22,17 @@ public class BootReceiver extends BroadcastReceiver {
 				}else{
 					parsebuildprop.editString("hw.acer.psensor_calib_min_base", "32716");
 				}
+	    		int icon = android.R.drawable.stat_sys_warning;
+	    		CharSequence tickerText = "System need a REBOOT"; //Initial text that appears in the status bar
+	    		long when = System.currentTimeMillis();
+	    		Notification mNotification = new Notification(icon, tickerText, when);
+	    		String mContentTitle = "System needs a REBOOT"; //Full title of the notification in the pull down
+	    		CharSequence contentText = "due to changes in build.prop file"; //Text of the notification in the pull down
+	    		Intent notificationIntent = new Intent();
+	    		PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+	    		mNotification.setLatestEventInfo(context, mContentTitle, contentText, mContentIntent);
+	    		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	    		mNotificationManager.notify(3, mNotification);
     		}
-            NotificationHelper.createnotification("System need a REBOOT",
-            		android.R.drawable.stat_sys_warning,
-            		"System need a REBOOT",
-            		"due to changes in build.prop file",
-            		Notification.FLAG_AUTO_CANCEL,
-            		false);
-    		
-    		int icon = android.R.drawable.stat_sys_warning;
-    		CharSequence tickerText = "System need a REBOOT"; //Initial text that appears in the status bar
-    		long when = System.currentTimeMillis();
-    		Notification mNotification = new Notification(icon, tickerText, when);
-    		String mContentTitle = "System needs a REBOOT"; //Full title of the notification in the pull down
-    		CharSequence contentText = "due to changes in build.prop file"; //Text of the notification in the pull down
-    		Intent notificationIntent = new Intent();
-    		PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-    		mNotification.setLatestEventInfo(context, mContentTitle, contentText, mContentIntent);
-    		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-    		mNotificationManager.notify(3, mNotification);
         }
 }

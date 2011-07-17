@@ -1,19 +1,33 @@
 package com.suxsem.liquidnextparts.components;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 
 import com.suxsem.liquidnextparts.activities.OTA_updates_status;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 {
@@ -65,8 +79,14 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			if (gorecovery.equals("r1")){
 				filelocation = "/sdcard/LiquidNext_autoflash.zip";
 			}
-
-			conn = (HttpURLConnection) new URL(url[0]).openConnection();       
+			String hotlink = gethotlinkfrommultiupload(url[0]);
+			if (hotlink.equals("error")){
+				NotificationHelper.arg = filelocation + "#" + gorecovery + "#" + partialfilelocation;
+				NotificationHelper.urlDecodeError();
+				d = Drawable.createFromStream((InputStream) new ByteArrayInputStream(out.toByteArray()), "filename");
+				return d;
+			}		
+			conn = (HttpURLConnection) new URL(hotlink).openConnection();       
 			//conn.setRequestProperty("Connection", "close");                                
 			File localfile = new File(partialfilelocation);
 			if(localfile.exists()){
@@ -117,18 +137,22 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 					out = new ByteArrayOutputStream((int) (fileSize - downloaded));
 				}
 
-				int read = stream.read(buffer);
+				try {
+					int read = stream.read(buffer);
 
-				if (read == -1)
-				{
-					publishProgress(100);
-					break;
+					if (read == -1)
+					{
+						publishProgress(100);
+						break;
+					}
+					// writing to buffer
+					out.write(buffer, 0, read);
+					fos.write(out.toByteArray());
+					downloaded += read;
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				// writing to buffer
-				out.write(buffer, 0, read);
-				fos.write(out.toByteArray());
-				downloaded += read;
-				// update progress bar
 
 				try {
 					if (previousperc == (int) ((downloaded / fileSize) * 100)){
@@ -207,6 +231,61 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		NotificationHelper.arg = filelocation + "#" + gorecovery + "#" + partialfilelocation;		
 		mNotificationHelper.completed(error);
 		// do something
+	}
+	
+	private String gethotlinkfrommultiupload(String downloadpage){
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
+		HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+		HttpClient httpClient = new DefaultHttpClient(httpParameters);
+		HttpContext localContext = new BasicHttpContext();
+		HttpGet httpGet = new HttpGet(downloadpage);					
+		HttpResponse response = null;
+		try {
+			response = httpClient.execute(httpGet, localContext);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(response==null){
+					return "error";
+		}
+
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(
+					new InputStreamReader(
+							response.getEntity().getContent()
+					)
+			);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String line = null;
+
+		try {
+			while ((line = reader.readLine()) != null){		     	  			  
+				int start = line.indexOf("<div id=\"downloadbutton_\" style=\"\"><a href=\"") + 44;
+				int end = line.indexOf("\"><IMG SRC=\"img/but_direct.gif\" WIDTH=\"147\" HEIGHT=\"32\"");
+				
+				Log.d("LS", line.substring(start, end));
+
+				return line.substring(start, end);
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
 	}
 }
 

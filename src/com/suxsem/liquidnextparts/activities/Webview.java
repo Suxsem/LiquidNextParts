@@ -76,7 +76,7 @@ public class Webview extends Activity {
    			 
    		 };
 		
-			final CountDownTimer timer_timeout = new CountDownTimer(20000, 20000) {
+			final CountDownTimer timer_timeout = new CountDownTimer(40000, 40000) {
 
 				@Override
 				public void onFinish() {

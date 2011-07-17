@@ -204,7 +204,7 @@ public class OTA_updates {
 						HttpConnectionParams.setSoTimeout(httpParameters, 10000);
 						HttpClient httpClient = new DefaultHttpClient(httpParameters);
 						HttpContext localContext = new BasicHttpContext();
-						HttpGet httpGet = new HttpGet("http://liquidnext.uphero.com/version");					
+						HttpGet httpGet = new HttpGet(myactivity.getString(R.string.lnpversioncheck));					
 						HttpResponse response = null;
 						try {
 							response = httpClient.execute(httpGet, localContext);
