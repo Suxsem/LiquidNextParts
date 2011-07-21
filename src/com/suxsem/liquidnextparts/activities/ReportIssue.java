@@ -26,7 +26,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -51,6 +55,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -58,6 +63,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
@@ -100,6 +106,7 @@ public class ReportIssue extends Activity {
 	EditText issuedescription;
 	Spinner issuecategory;
 	Spinner issuepriority;
+	SharedPreferences prefs;
 	
 	@Override
 	public void onResume(){
@@ -139,6 +146,9 @@ public class ReportIssue extends Activity {
 		setContentView(R.layout.reportissue_layout);
 		
 		myactivity = this;
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(myactivity);
+		
 		final ViewFlipper mainview = (ViewFlipper)findViewById(R.id.viewFlipper1);		
 		final Button viewback = (Button)findViewById(R.id.button1);
 			viewback.setEnabled(false);
@@ -227,8 +237,9 @@ public class ReportIssue extends Activity {
 		issuesummary = (EditText)findViewById(R.id.issuesummary);
 		issuedescription = (EditText)findViewById(R.id.issuedescription);
 		
-		accountuser.setText("@gmail.com");
-		accountpassword.setText("");
+		
+		accountuser.setText(prefs.getString("googleaccountmail", "@gmail.com"));
+		accountpassword.setText(prefs.getString("googleaccountpassword", ""));
 		issuesummary.setText("");
 		String issuedescripttext = "";
 		issuedescripttext += "=============" + "\n";
@@ -307,26 +318,32 @@ public class ReportIssue extends Activity {
 		Toast.makeText(myactivity, "Invalid goocle account mail!", 4000).show();
 	}else if(accountpassword.equals("")){
 		Toast.makeText(myactivity, "Invalid google account password!", 4000).show();
-	/*}else if(issuesummary.equals("")){
+	}else if(issuesummary.equals("")){
 		Toast.makeText(myactivity, "Invalid issue summary!", 4000).show();
 	}else if( (int)issuecategory.getSelectedItemId()== 0){
 		Toast.makeText(myactivity, "Invalid issue category!", 4000).show();
 	}else if ((int)issuepriority.getSelectedItemId() == 0){
 		Toast.makeText(myactivity, "Invalid issue priority!", 4000).show();
 	}else if (!gotlogcat){
-		Toast.makeText(myactivity, "You have to take logs!", 4000).show();*/
-	}else{
+		Toast.makeText(myactivity, "You have to take logs!", 4000).show();
+	}else
+	{
 	
+		Editor editor = prefs.edit();
+		editor.putString("googleaccountmail", accountuser.getText().toString());
+		editor.putString("googleaccountpassword", accountpassword.getText().toString());
+		editor.commit();
 
+	String authtoken = "";
 	HttpClient client = new DefaultHttpClient();
 	HttpPost post = new HttpPost("https://www.google.com/accounts/ClientLogin");
-	//post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+	post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 	List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 	pairs.add(new BasicNameValuePair("accountType", "GOOGLE"));
 	pairs.add(new BasicNameValuePair("Email", accountuser.getText().toString()));
 	pairs.add(new BasicNameValuePair("Passwd", accountpassword.getText().toString()));
-	pairs.add(new BasicNameValuePair("service", "liquidnextbugtracker"));
-	pairs.add(new BasicNameValuePair("source", "Suxsem-LiquidNextParts"));
+	pairs.add(new BasicNameValuePair("service", "code"));
+	pairs.add(new BasicNameValuePair("source", "LiquidNextParts"));
 	try {
 		post.setEntity(new UrlEncodedFormEntity(pairs));
 	} catch (UnsupportedEncodingException e) {
@@ -337,23 +354,21 @@ public class ReportIssue extends Activity {
 		HttpResponse response = client.execute(post);
 		BufferedReader in = new BufferedReader(new
 				InputStreamReader(response.getEntity().getContent()));
-				                        StringBuffer sb = new StringBuffer("");
 				                        String line = "";
-				                        String NL = System.getProperty("line.separator");
 				                        while((line = in.readLine())!= null)
-				                                sb.append(line + NL);
+				                        if(line.substring(0,4).equals("Auth")){
+				                        	authtoken = line.substring(5,line.length());
+				                        	break;
+				                        }
 				                        in.close();
-
-				                        String result = sb.toString(); 
-		Log.d("LS",result);
 	} catch (ClientProtocolException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
-	
+	}	
+		    
 	String pastebin_logcat_url = "";
 	String pastebin_dmesg_url = "";
 	try {

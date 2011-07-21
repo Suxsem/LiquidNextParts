@@ -52,7 +52,6 @@ public class OTA_updates_status extends Activity{
 			Cancel.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					NotificationHelper.closeclass();
 					myactivity.finish();
 				}
@@ -60,7 +59,6 @@ public class OTA_updates_status extends Activity{
 			CancelAndDelete.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					NotificationHelper.closeclass();
 					final String actualfilename = myactivity.getString(R.string.lastversion).replaceAll(" ", "_");
 					LiquidSettings.runRootCommand("rm -f /sdcard/"+actualfilename+".PARTIALDOWNLOAD");					
@@ -70,14 +68,12 @@ public class OTA_updates_status extends Activity{
 			Close.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					myactivity.finish();
 				}
 			});
 			PauseResume.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					if(NotificationHelper.ispaused){
 						NotificationHelper.ispaused = false;
 						DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), NotificationHelper.arg);
