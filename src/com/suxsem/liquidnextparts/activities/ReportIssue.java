@@ -58,6 +58,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -312,9 +313,16 @@ public class ReportIssue extends Activity {
 	}
 	
 	private void sendissue(){
+		//TODO: progressdialog doesn't work because we have to insert ouw code into an handler...
 	waitdialog = ProgressDialog.show(myactivity, "Report an issue", 
 				"Sending issue...", true);
-	if(/*accountuser.equals("gmail.com") ||*/ accountuser.equals("")){
+	ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+	android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+	android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+			wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+		Toast.makeText(myactivity, "No Internet connection!", 4000).show();
+	}else if(/*accountuser.equals("gmail.com") ||*/ accountuser.equals("")){
 		Toast.makeText(myactivity, "Invalid goocle account mail!", 4000).show();
 	}else if(accountpassword.equals("")){
 		Toast.makeText(myactivity, "Invalid google account password!", 4000).show();
