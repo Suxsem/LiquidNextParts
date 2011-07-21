@@ -90,7 +90,10 @@
 	<CheckBoxPreference
                 android:key="updateonstart"           
                 android:title="Update on start"
-                android:summary="Check for updates on app start" />                          
+                android:summary="Check for updates on app start" />                
+   	<Preference android:title="Report an issue" 
+   					android:key="reportissue" 
+   					android:summary="Create a new issue on LN bugtracker" />                                         
    	<Preference android:title="Info and help" 
    					android:key="menu_info" 
    					android:summary="About this app" />

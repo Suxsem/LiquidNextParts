@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:padding="10dp" android:layout_width="match_parent" android:id="@+id/scrollView1" android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+        <Button android:text="Capture Logcat + Dmesg logs now" android:id="@+id/button1" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+        <Button android:text="Reproduce issue, than capture logs (SUGGESTED)" android:layout_width="match_parent" android:id="@+id/button2" android:layout_height="wrap_content"></Button>
+    <TextView android:text="Google account email" android:layout_width="wrap_content" android:id="@+id/textView1" android:layout_height="wrap_content"></TextView>
+    <EditText android:id="@+id/editText1" android:layout_width="match_parent" android:text="EditText" android:layout_height="wrap_content"></EditText>
+    <TextView android:text="Google account password" android:layout_width="wrap_content" android:id="@+id/textView2" android:layout_height="wrap_content"></TextView>
+    <EditText android:id="@+id/editText2" android:layout_width="match_parent" android:text="EditText" android:layout_height="wrap_content"></EditText>
+    <TextView android:text="Issue summary" android:layout_width="wrap_content" android:id="@+id/textView3" android:layout_height="wrap_content"></TextView>
+    <EditText android:id="@+id/editText3" android:layout_width="match_parent" android:text="EditText" android:layout_height="wrap_content"></EditText>
+    <TextView android:text="Issue description" android:layout_width="wrap_content" android:id="@+id/textView4" android:layout_height="wrap_content"></TextView>
+    <EditText android:id="@+id/editText4" android:layout_width="match_parent" android:text="EditText" android:layout_height="500dp" android:gravity="top"></EditText>
+    <TextView android:text="Issue category" android:layout_width="wrap_content" android:id="@+id/textView5" android:layout_height="wrap_content"></TextView>
+    <Spinner android:id="@+id/spinner1" android:layout_width="match_parent" android:layout_height="wrap_content"></Spinner>
+    <TextView android:text="Issue priority" android:layout_width="wrap_content" android:id="@+id/textView6" android:layout_height="wrap_content"></TextView>
+    <Spinner android:id="@+id/spinner2" android:layout_width="match_parent" android:layout_height="wrap_content"></Spinner>
+    <Button android:text="REPORT ISSUE" android:id="@+id/button3" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+    <Button android:text="CLOSE" android:id="@+id/button4" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+        </LinearLayout>
+    </ScrollView>

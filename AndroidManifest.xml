@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="26"
+      android:versionCode="27"
       android:installLocation="auto" android:versionName="@string/app_vname" package="com.suxsem.liquidnextparts">
     <uses-sdk android:minSdkVersion="9" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -17,16 +17,26 @@
         </activity>
         <activity class=".OTA_updates_status"
         android:name=".activities.OTA_updates_status"
-        android:label="Download status">
-        </activity>       
+        android:label="LNP - Download status">
+        </activity>
+        <activity class=".getlogs"
+        android:name=".activities.getlogs"
+        android:label="LNP - Get logs">
+        </activity>         
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
-        android:label="Information and documentation" />
+        android:label="LNP - Information and documentation" />
         
         <activity class=".Webview"
         android:screenOrientation="portrait"
 		android:name=".activities.Webview"
-        android:label="LiquidNextParts ADS" />
+        android:label="LNP - ADS" />
+        
+        <activity class=".ReportIssue"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait"
+		android:name=".activities.ReportIssue"
+        android:label="LNP - Report an issue" />
 		         
 		<receiver android:name=".components.BootReceiver">  
     		<intent-filter>  

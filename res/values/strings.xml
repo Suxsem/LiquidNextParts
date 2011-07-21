@@ -27,5 +27,21 @@
                 <item>nm2</item>
                 <item>nm3</item>
 </array>
+<array name="issuecategory">
+				<item>Click here to choose...</item>
+                <item>Type-Sensors</item>
+                <item>Type-LNP</item>
+                <item>Type-Stability</item>
+                <item>Type-Performance</item>
+				<item>Type-Connections</item>
+                <item>Type-Apps</item>
+                <item>Type-Settings</item>
+                <item>Type-Others</item>                                				
+</array>
+<array name="issuepriority">
+				<item>Click here to choose...</item>
+                <item>Priority-High</item>
+                <item>Priority-Medium</item>
+                <item>Priority-Low</item>
+</array>
 </resources>
-

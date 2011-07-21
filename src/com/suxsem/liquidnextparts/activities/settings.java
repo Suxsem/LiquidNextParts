@@ -101,6 +101,7 @@ public class settings extends PreferenceActivity {
 		final Preference hotreboot = findPreference("hotreboot");
 		final Preference forceupdate = findPreference("forceupdate");
 		final Preference donateclick = findPreference("donateclick");
+		final Preference reportissue = findPreference("reportissue");
 		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
 		final Preference resetall = findPreference("resetall");
 		
@@ -409,6 +410,17 @@ public class settings extends PreferenceActivity {
 					});
 					builder.create().show();
 				}									
+				return true;
+			}
+		});
+
+		
+		reportissue.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(myactivity, ReportIssue.class.getName());
+				startActivity(myintent);
 				return true;
 			}
 		});
