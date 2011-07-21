@@ -15,7 +15,7 @@
  * onCreate: inizializza l'interfaccia utente
  * getlog: salva logcat e dmesg nella cache
  * sendissue: richiama e invia i dati inseriti al bugtracker
- * 
+ * no 
  */
 
 package com.suxsem.liquidnextparts.activities;
@@ -23,6 +23,7 @@ package com.suxsem.liquidnextparts.activities;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -75,6 +76,7 @@ import android.widget.ViewFlipper;
 
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
+import com.suxsem.liquidnextparts.UploadOnPastebin;
 import com.suxsem.liquidnextparts.parsebuildprop;
 import com.suxsem.liquidnextparts.components.NotificationHelper;
 import com.suxsem.liquidnextparts.components.StartSystem;
@@ -352,12 +354,22 @@ public class ReportIssue extends Activity {
 		e.printStackTrace();
 	}
 	
+	String pastebin_logcat_url = "";
+	String pastebin_dmesg_url = "";
+	try {
+		pastebin_logcat_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/logcat"));
+		pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url;
 	String posturl = "https://code.google.com/feeds/issues/p/liquidnextbugtracker/issues/full";
 	String finalxml = "";
 	finalxml += "<?xml version='1.0' encoding='UTF-8'?>";
 	finalxml += "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://schemas.google.com/projecthosting/issues/2009'>";
 	finalxml += "<title>" + issuesummary.getText().toString() + "</title>";
-	finalxml += "<content type='text/plain'>" + issuedescription.getText().toString() + "</content>";
+	finalxml += "<content type='text/plain'>" + issuedescription.getText().toString() + addpastebinlinks + "</content>";
 	finalxml += "<author><name>" + accountuser.getText().toString() + "</author></name>";
 	finalxml += "<issues:status>New</issues:status>";
 	finalxml += "<issues:owner><issues:username>" + accountuser.getText().toString() + "</issues:username></issues:owner>";
