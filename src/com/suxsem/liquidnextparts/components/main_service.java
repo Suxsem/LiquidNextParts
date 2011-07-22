@@ -2,6 +2,12 @@ package com.suxsem.liquidnextparts.components;
 
 
 import com.suxsem.liquidnextparts.LiquidSettings;
+import com.suxsem.liquidnextparts.R;
+import com.suxsem.liquidnextparts.activities.ReportIssue;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +27,7 @@ import android.provider.CallLog;
 //import android.provider.Settings;
 import android.provider.CallLog.Calls;
 import android.telephony.SmsManager;
+import android.widget.RemoteViews;
 
 public class main_service extends Service {
 	SmsManager sms;
@@ -46,7 +53,8 @@ public class main_service extends Service {
 	private Intent pluggedintent;*/
 	
 	public WifiManager wifimanager;
-	
+	private static main_service myactivity;
+	private static NotificationManager mNotificationManager;
 	BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
 
 		public void onReceive(Context context, Intent intent) {
@@ -152,6 +160,8 @@ public class main_service extends Service {
 	@SuppressWarnings("static-access")
 	public void onCreate() {
 		super.onCreate();
+		myactivity = this;
+		mNotificationManager = (NotificationManager) myactivity.getSystemService(Context.NOTIFICATION_SERVICE);
 		powermanager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
 		wifimanager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		wakelockcall = this.powermanager.newWakeLock(
@@ -198,19 +208,38 @@ public class main_service extends Service {
 		}
 	}
 	public static void startcall(){
-			call = true;
+			call = true;			
 			try {
 				wakelockcall.acquire();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			String tickerText = "New call...";			
+	        Notification mNotification = new Notification(android.R.drawable.stat_sys_warning, tickerText, System.currentTimeMillis());
+	        Intent intent;
+	        intent = new Intent();
+	        PendingIntent mContentIntent = PendingIntent.getActivity(myactivity, 0, intent, 0);
+			RemoteViews contentView = new RemoteViews(myactivity.getPackageName(), R.layout.notification_custom_layout);
+	        contentView.setImageViewResource(R.id.notification_layout_image, R.drawable.icon);
+	        contentView.setTextViewText(R.id.notification_layout_text1, "LNP - Fix proximity sensor");
+	        contentView.setTextViewText(R.id.notification_layout_text2, "Service running...");
+	        mNotification.contentView = contentView;
+	        mNotification.contentIntent = mContentIntent;
+	        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
+	        mNotificationManager.notify(7, mNotification);
 	}
 	public static void stopcall(){
 			call = false;
 			//LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
 			try {
 				wakelockcall.release();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				mNotificationManager.cancel(7);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

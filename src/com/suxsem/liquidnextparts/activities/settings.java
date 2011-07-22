@@ -417,12 +417,20 @@ public class settings extends PreferenceActivity {
 		
 		reportissue.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
-			public boolean onPreferenceClick(Preference preference) {
-				ProgressDialog.show(myactivity, "Report an issue", 
-						"Loading issues list...", true);
-				Intent myintent = new Intent (Intent.ACTION_VIEW);
-				myintent.setClassName(myactivity, ReportIssue.class.getName());
-				startActivity(myintent);
+			public boolean onPreferenceClick(Preference preference) {				
+				ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+				android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+				android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+						wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+					ProgressDialog.show(myactivity, "Report an issue", 
+							"Loading issues list...", true);
+					Intent myintent = new Intent (Intent.ACTION_VIEW);
+					myintent.setClassName(myactivity, ReportIssue.class.getName());
+					startActivity(myintent);
+				}else{
+					Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 4000).show();
+				}
 				return true;
 			}
 		});

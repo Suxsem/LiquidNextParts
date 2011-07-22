@@ -382,6 +382,7 @@ public class ReportIssue extends Activity implements OnClickListener {
 		        contentView.setTextViewText(R.id.notification_layout_text2, "Issue reproduced?");
 		        mNotification.contentView = contentView;
 		        mNotification.contentIntent = mContentIntent;
+		        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
 		        mNotificationManager.notify(6, mNotification);
 		        Intent i = new Intent(); 
 		        i.setAction(Intent.ACTION_MAIN); 
