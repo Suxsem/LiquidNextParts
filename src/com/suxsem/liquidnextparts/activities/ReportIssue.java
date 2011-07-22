@@ -1,23 +1,3 @@
-/*
- * TODO:
- * 
- * 1) fixare autenticazione con google (per ora la richiesta restituisce:
- * Error=Unknown
- * D/LS      ( 6895): Url=https://www.google.com/accounts/ErrorMsg?service=liquidnextbugtracker&id=unknown&timeStmp=1311211260&secTok=.AG5fkS-z27e48BTzkT0YAjFDdSFQmGxOXA%3D%3D )
- * 
- * 2) aggiungere l'invio dei files di testo /cache/lnp/logcat e /cache/lnp/dmesg a pastebin e aggiungere i link di pastebin alla fine della variabile issuedescription
- * 
- * 3) aggiungere l'invio effettivo dell'xml
- * 
- * 
- * 
- * FUNZIONI:
- * onCreate: inizializza l'interfaccia utente
- * getlog: salva logcat e dmesg nella cache
- * sendissue: richiama e invia i dati inseriti al bugtracker
- * no 
- */
-
 package com.suxsem.liquidnextparts.activities;
 
 import java.io.BufferedReader;
@@ -61,7 +41,6 @@ import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -134,7 +113,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 			try {
 				mNotificationManager.cancel(6);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		this.finish();
@@ -200,7 +178,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent myintent = new Intent (Intent.ACTION_VIEW);
 				myintent.setClassName(myactivity, settings.class.getName());
 				startActivity(myintent);
@@ -211,7 +188,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				changestep(false);
 
 			}
@@ -220,7 +196,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				changestep(true);
 			}
 		});
@@ -239,10 +214,8 @@ public class ReportIssue extends Activity implements OnClickListener {
 		try {
 			response = httpClient.execute(httpGet, localContext);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(response==null){
@@ -256,10 +229,8 @@ public class ReportIssue extends Activity implements OnClickListener {
 					)
 			);
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -347,7 +318,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 			    rootview.addView(textView);				
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 
@@ -539,7 +509,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 				try {
 					post.setEntity(new UrlEncodedFormEntity(pairs));
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				try {
@@ -554,10 +523,8 @@ public class ReportIssue extends Activity implements OnClickListener {
 						}
 					in.close();
 				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 
@@ -569,7 +536,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 					pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
 					pastebin_buildprop_url = UploadOnPastebin.sub_paste(new File("/system/build.prop"));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url + "\nBUILD.PROP: " + pastebin_buildprop_url + "\n\nPOWERED BY LIQUIDNEXTPARTS APP";
@@ -594,8 +560,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 					finalxml += "<issues:updates></issues:updates></entry>";					
 				}
 				//SEND ISSUE
-				Log.d("LS",authtoken);
-				Log.d("LS",finalxml);
 				// Make connection
 
 				URL url = null;
@@ -629,7 +593,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 					}
 					out.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
