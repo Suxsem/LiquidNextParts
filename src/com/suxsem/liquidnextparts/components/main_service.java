@@ -215,7 +215,7 @@ public class main_service extends Service {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String tickerText = "New call...";			
+			String tickerText = "LNP - New call...";			
 	        Notification mNotification = new Notification(android.R.drawable.stat_sys_warning, tickerText, System.currentTimeMillis());
 	        Intent intent;
 	        intent = new Intent();

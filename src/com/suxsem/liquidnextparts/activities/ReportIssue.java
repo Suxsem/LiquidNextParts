@@ -563,14 +563,16 @@ public class ReportIssue extends Activity implements OnClickListener {
 
 				String pastebin_logcat_url = "";
 				String pastebin_dmesg_url = "";
+				String pastebin_buildprop_url = "";
 				try {
 					pastebin_logcat_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/logcat"));
 					pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
+					pastebin_buildprop_url = UploadOnPastebin.sub_paste(new File("/system/build.prop"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url + "\nPOWERED BY LIQUIDNEXTPARTS APP";
+				String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url + "\nBUILD.PROP: " + pastebin_buildprop_url + "\n\nPOWERED BY LIQUIDNEXTPARTS APP";
 				String finalxml = "";
 												
 				if(isnewissue){
