@@ -1,112 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
-     <PreferenceCategory
-            android:title=" Screen">
-	<EditTextPreference 
-		android:key="noise" 
-		android:title="Set noise"
-        android:numeric="integer"
-        android:inputType="number"
-		android:defaultValue="70"/>
-	<EditTextPreference 
-		android:key="sensitivity" 
-		android:title="Set sensitivity"
-        android:numeric="integer"
-        android:inputType="number"
-		android:defaultValue="70" />
-    <EditTextPreference 
-		android:key="softsens" 
-		android:title="Set softkey sensitivity"
-        android:numeric="integer"
-        android:inputType="number"
-		android:defaultValue="16" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="LED">
-   	<CheckBoxPreference
-                android:key="powerled"
-                android:title="Disable Power LED"
-                android:summary="Disable Power LED while charging" />
-    <CheckBoxPreference
-                android:key="fixsms"              
-                android:title="Fix sms LED"
-                android:summary="Override sms LED managment" />               
-   	<CheckBoxPreference
-                android:key="bottomled"              
-                android:title="Use softkey LED"
-                android:summary="Use softkey LED as New SMS LED" />
-    <CheckBoxPreference
-                android:key="fixcall"            
-                android:title="Fix call LED"
-                android:summary="Override call LED managment" />
-    </PreferenceCategory>              
-    <PreferenceCategory
-            android:title="System">
-        <CheckBoxPreference
-                android:key="hf"
-                android:title="Haptic feedback"
-                android:summary="softkey vibration" />
-        <EditTextPreference 
-			android:key="sdcache" 
-			android:title="Set sd cache size"
-        	android:summary="@string/sdcachesum"
-        	android:numeric="integer"
-        	android:inputType="number"
-			android:defaultValue="2048"/>
-                <ListPreference
-                        android:title="2G/3G mode"
-                        android:summary="Set network mode"
-                        android:key="2g3gmode"
-                        android:defaultValue="nm3"
-                        android:entries="@array/nma"
-                        android:entryValues="@array/nmavalue" />
-		<CheckBoxPreference
-                android:key="noprox"           
-                android:title="Disable proximity"
-                android:summary="Disable proximity sensor" />                        			
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:title="Tools">
-	<Preference
-            android:key="diskspace"
-            android:title="Disk space"
-            android:summary="View disk space usage" />
-	<Preference
-            android:key="hotreboot"
-            android:title="Hot reboot"
-            android:summary="Reboot only the Android shell" />                                                     
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title=" Screen">
+		<EditTextPreference android:key="noise"
+			android:title="Set noise" android:numeric="integer"
+			android:inputType="number" android:defaultValue="70" />
+		<EditTextPreference android:key="sensitivity"
+			android:title="Set sensitivity" android:numeric="integer"
+			android:inputType="number" android:defaultValue="70" />
+		<EditTextPreference android:key="softsens"
+			android:title="Set softkey sensitivity" android:numeric="integer"
+			android:inputType="number" android:defaultValue="16" />
 	</PreferenceCategory>
-   	
-   	<PreferenceCategory
-            android:title="LiquidNext">
-	<Preference
-            android:key="donateclick"
-            android:title="Give us a click!"
-            android:summary="When you can, give us a click, thanks!" />                 
-	<Preference
-            android:key="forceupdate"
-            android:title="Force ROM update"
-            android:summary="Force ROM updates check" />
-	<CheckBoxPreference
-                android:key="updateonstart"           
-                android:title="Update on start"
-                android:summary="Check for updates on app start" />                
-   	<Preference android:title="Report an issue" 
-   					android:key="reportissue" 
-   					android:summary="Create a new issue on LN bugtracker" />                                         
-   	<Preference android:title="Info and help" 
-   					android:key="menu_info" 
-   					android:summary="About this app" />
-   	</PreferenceCategory>
-	<PreferenceCategory
-            android:title="Reset">   					
-	<CheckBoxPreference
-                android:key="enableresetall"           
-                android:title="Enable reset all"
-                android:summary="Enable reset all button (below)" />                          
-   	<Preference android:title="RESET ALL SETTINGS"
-   					android:dependency="enableresetall" 
-   					android:key="resetall"
-   					android:summary="Reset all LNP settings + ROM fixes" />     					   				
-	</PreferenceCategory>   					
+	<PreferenceCategory android:title="LED">
+		<CheckBoxPreference android:key="powerled"
+			android:title="Disable Power LED" android:summary="Disable Power LED while charging" />
+		<CheckBoxPreference android:key="fixsms"
+			android:title="Fix sms LED" android:summary="Override sms LED managment" />
+		<CheckBoxPreference android:key="bottomled"
+			android:title="Use softkey LED" android:summary="Use softkey LED as New SMS LED" />
+		<CheckBoxPreference android:key="fixcall"
+			android:title="Fix call LED" android:summary="Override call LED managment" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="System">
+		<CheckBoxPreference android:key="hf" android:title="Haptic feedback"
+			android:summary="softkey vibration" />
+		<EditTextPreference android:key="sdcache"
+			android:title="Set sd cache size" android:summary="@string/sdcachesum"
+			android:numeric="integer" android:inputType="number"
+			android:defaultValue="2048" />
+		<ListPreference android:title="2G/3G mode"
+			android:summary="Set network mode" android:key="2g3gmode"
+			android:defaultValue="nm3" android:entries="@array/nma"
+			android:entryValues="@array/nmavalue" />
+		<CheckBoxPreference android:key="noprox"
+			android:title="Disable proximity" android:summary="Disable proximity sensor" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Tools">
+		<Preference android:key="diskspace" android:title="Disk space"
+			android:summary="View disk space usage" />
+		<Preference android:key="hotreboot" android:title="Hot reboot"
+			android:summary="Reboot only the Android shell" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="LiquidNext">
+		<Preference android:key="donateclick" android:title="Give us a click!"
+			android:summary="When you can, give us a click, thanks!" />
+		<Preference android:key="forceupdate" android:title="Force ROM update"
+			android:summary="Force ROM updates check" />
+		<CheckBoxPreference android:key="updateonstart"
+			android:title="Update on start" android:summary="Check for updates on app start" />
+		<Preference android:title="Report an issue" android:key="reportissue"
+			android:summary="Report a new issue on LN bugtracker" />
+		<Preference android:title="Info and help" android:key="menu_info"
+			android:summary="About this app" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Links" />
+
+	<PreferenceScreen android:title="Open LN bugtracker"
+		android:summary="Open LN bugtracker webpage">
+		<intent android:action="android.intent.action.VIEW"
+			android:data="http://code.google.com/p/liquidnextbugtracker/issues/list" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="Open LN webpage"
+		android:summary="Open LN official webpage on Modaco">
+		<intent android:action="android.intent.action.VIEW"
+			android:data="http://android.modaco.com/topic/341233-%E2%98%86%E2%98%86%E2%98%86-rom-gb-liquidnext-161-180711-%E2%98%86%E2%98%86%E2%98%86/" />
+	</PreferenceScreen>
+	<PreferenceScreen android:title="Open LN Facebook page"
+		android:summary="Open LN official Facebook fanpage (with news!)">
+		<intent android:action="android.intent.action.VIEW"
+			android:data="http://www.facebook.com/pages/LIQUID-NEXT-ROM/165227390209517" />
+	</PreferenceScreen>
+	<PreferenceCategory android:title="Reset">
+		<CheckBoxPreference android:key="enableresetall"
+			android:title="Enable reset all" android:summary="Enable reset all button (below)" />
+		<Preference android:title="RESET ALL SETTINGS"
+			android:dependency="enableresetall" android:key="resetall"
+			android:summary="Reset all LNP settings + ROM fixes" />
+	</PreferenceCategory>
 </PreferenceScreen>
