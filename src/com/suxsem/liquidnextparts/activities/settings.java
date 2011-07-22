@@ -418,6 +418,8 @@ public class settings extends PreferenceActivity {
 		reportissue.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
+				ProgressDialog.show(myactivity, "Report an issue", 
+						"Loading issues list...", true);
 				Intent myintent = new Intent (Intent.ACTION_VIEW);
 				myintent.setClassName(myactivity, ReportIssue.class.getName());
 				startActivity(myintent);

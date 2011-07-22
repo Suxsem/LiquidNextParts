@@ -8,14 +8,20 @@
         <Button android:id="@+id/button2" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="NEXT"></Button>
     </LinearLayout>
     <ViewFlipper android:layout_width="match_parent" android:id="@+id/viewFlipper1" android:layout_height="match_parent">
+
     	<LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout1" android:layout_height="match_parent" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
     		<TextView android:layout_marginBottom="40dp" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView12" android:text='WELCAME TO Report new issue FEATURE OF LIQUIDNEXTPARTS! PLEASE FOLLOW CAREFULLY ALL STEPS! WHEN YOU COMPLETE A STEP PRESS "NEXT" BUTTON ON TOP!' android:gravity="center"></TextView>
-    		<TextView android:text="PLEASE. Before sending a new issue, check if your issue already exists in our bugtracker!" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView10" android:gravity="center"></TextView>
-    		<Button android:id="@+id/button8" android:layout_margin="10dp" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="OPEN LiquidNext BUGTRACKER"></Button>
-    		<TextView android:text="THANKS!" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView11"></TextView>
+    		<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView10" android:gravity="center" android:text="PLEASE. Before sending a new issue, check if your issue already exists in the next step!"></TextView>
+    		<TextView android:text="THANKS!" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView11" android:layout_marginTop="40dp"></TextView>
     		<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon" android:id="@+id/imageView1" android:layout_marginTop="20dp"></ImageView>
-        </LinearLayout>        
-    	<LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout2" android:layout_height="match_parent" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout2" android:layout_height="match_parent" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
+        		<TextView android:text="CHOOSE AN ISSUE" android:layout_width="wrap_content" android:id="@+id/textView13" android:layout_height="wrap_content" android:layout_margin="10dp"></TextView>
+    		<ScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/scrollView1">
+    			<LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout_innserll2" android:layout_height="match_parent" android:orientation="vertical"></LinearLayout>
+    		</ScrollView>    		
+        </LinearLayout>                 
+    	<LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout3" android:layout_height="match_parent" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
             <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView1" android:text='Press the button below, reproduce the issue and press "Issue reproduced?" in notification bar...'></TextView>
             <Button android:id="@+id/button3" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_margin="10dp" android:text="GET LOGCAT AND DMESG (SUGGESTED)"></Button>
             <TextView android:text="or...press the button below if your issue isn't related to particular moment" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView2"></TextView>
@@ -23,7 +29,7 @@
             <TextView android:text="or...press the button below if you don't want to take logs" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView3"></TextView>
             <Button android:id="@+id/button5" android:layout_margin="10dp" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="DON'T TAKE LOGS (NOT SUGGESTED)"></Button>
         </LinearLayout>
-        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout3">
+        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout4">
             <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView5" android:text="Due to Google Code restrictions you have to authentication with a Google Account. Type your email..."></TextView>
             <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/accountuser" android:text="EditText" android:layout_margin="10dp"></EditText>
             <TextView android:text="...and password..." android:layout_height="wrap_content" android:id="@+id/textView6" android:layout_width="match_parent"></TextView>
@@ -31,11 +37,11 @@
             <TextView android:text="Now choose a significative one-line summary for your issue..." android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView4"></TextView>
             <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/issuesummary" android:text="EditText" android:layout_margin="10dp"></EditText>
         </LinearLayout>
-        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout4">
+        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout5">
         	<TextView android:text="Now it's time to explain the issue... be careful!" android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/textView7"></TextView>
     		<EditText android:layout_width="match_parent" android:id="@+id/issuedescription" android:text="EditText" android:layout_height="match_parent" android:scrollbars="vertical" android:scrollbarAlwaysDrawVerticalTrack="true"></EditText>    		
     	</LinearLayout>                       
-        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout5">
+        <LinearLayout android:orientation="vertical" android:layout_height="match_parent" android:layout_width="match_parent" android:gravity="center" android:layout_gravity="center" android:id="@+id/linearLayout6">
     		<TextView android:text="Choose the issue category from the list..." android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView8"></TextView>
     		<Spinner android:layout_width="match_parent" android:id="@+id/spinner1" android:layout_height="wrap_content" android:layout_margin="10dp" android:entries="@array/issuecategory"></Spinner>
     		<TextView android:text="Choose the issue priority (in your opinion)..." android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView9"></TextView>
