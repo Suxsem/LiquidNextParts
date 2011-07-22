@@ -461,7 +461,7 @@ public class settings extends PreferenceActivity {
 	private void showhelp(){
 		Intent myintent = new Intent (Intent.ACTION_VIEW);
 		myintent.setClassName(myactivity, InfoPreferenceActivity.class.getName());
-		startActivity(myintent);	
+		startActivity(myintent);
 	}
 
 

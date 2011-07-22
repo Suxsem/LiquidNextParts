@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -90,7 +91,6 @@ import com.suxsem.liquidnextparts.components.StartSystem;
 
 public class ReportIssue extends Activity { 
 
-
 	ReportIssue myactivity = null;
 	ReportIssue webviewclass = this;
 	Timer timer;
@@ -108,6 +108,16 @@ public class ReportIssue extends Activity {
 	Spinner issuecategory;
 	Spinner issuepriority;
 	SharedPreferences prefs;
+	String toastmessage = "";
+	
+	@Override
+	public void onBackPressed() {
+		Intent myintent = new Intent (Intent.ACTION_VIEW);
+		myintent.setClassName(this.getBaseContext(), settings.class.getName());
+		startActivity(myintent);
+		this.finish();
+	return;
+	}
 	
 	@Override
 	public void onResume(){
@@ -135,6 +145,7 @@ public class ReportIssue extends Activity {
 	}
 	
 	private void getlog(){
+		LiquidSettings.runRootCommand("mkdir /cache/lnp");
 		LiquidSettings.runRootCommand("logcat -d > /cache/lnp/logcat");
 		LiquidSettings.runRootCommand("dmesg > /cache/lnp/dmesg");
 		Toast.makeText(myactivity, "Logs saved!", 4000).show();
@@ -160,6 +171,9 @@ public class ReportIssue extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(myactivity, settings.class.getName());
+				startActivity(myintent);
 				myactivity.finish();
 			}
 		});
@@ -187,7 +201,18 @@ public class ReportIssue extends Activity {
 				}
 			}
 		});
-				
+
+		final Button openbugtracker = (Button)findViewById(R.id.button8);
+		openbugtracker.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String url = "http://code.google.com/p/liquidnextbugtracker/issues/list";  
+				Intent i = new Intent(Intent.ACTION_VIEW);  
+				i.setData(Uri.parse(url));  
+				startActivity(i);
+			}
+		});
+		
 		final Button getlocat = (Button)findViewById(R.id.button3);
 		final Button getlocatnow = (Button)findViewById(R.id.button4);
 		final Button getlocatnever = (Button)findViewById(R.id.button5);
@@ -226,7 +251,8 @@ public class ReportIssue extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				gotlogcat = true;
+				gotlogcat = true;				
+				LiquidSettings.runRootCommand("mkdir /cache/lnp");
 				LiquidSettings.runRootCommand("echo \"No logcat\" > /cache/lnp/logcat");
 				LiquidSettings.runRootCommand("echo \"No dmesg\" > /cache/lnp/dmesg");
 				Toast.makeText(myactivity, "Choice saved!", 4000).show();		
@@ -313,95 +339,141 @@ public class ReportIssue extends Activity {
 	}
 	
 	private void sendissue(){
-		//TODO: progressdialog doesn't work because we have to insert ouw code into an handler...
 	waitdialog = ProgressDialog.show(myactivity, "Report an issue", 
 				"Sending issue...", true);
-	ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-	android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-	android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-	if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
-			wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
-		Toast.makeText(myactivity, "No Internet connection!", 4000).show();
-	}else if(/*accountuser.equals("gmail.com") ||*/ accountuser.equals("")){
-		Toast.makeText(myactivity, "Invalid goocle account mail!", 4000).show();
-	}else if(accountpassword.equals("")){
-		Toast.makeText(myactivity, "Invalid google account password!", 4000).show();
-	}else if(issuesummary.equals("")){
-		Toast.makeText(myactivity, "Invalid issue summary!", 4000).show();
-	}else if( (int)issuecategory.getSelectedItemId()== 0){
-		Toast.makeText(myactivity, "Invalid issue category!", 4000).show();
-	}else if ((int)issuepriority.getSelectedItemId() == 0){
-		Toast.makeText(myactivity, "Invalid issue priority!", 4000).show();
-	}else if (!gotlogcat){
-		Toast.makeText(myactivity, "You have to take logs!", 4000).show();
-	}else
-	{
 	
-		Editor editor = prefs.edit();
-		editor.putString("googleaccountmail", accountuser.getText().toString());
-		editor.putString("googleaccountpassword", accountpassword.getText().toString());
-		editor.commit();
+	new Thread()
+	{
+		public void run() 
+		{
 
-	String authtoken = "";
-	HttpClient client = new DefaultHttpClient();
-	HttpPost post = new HttpPost("https://www.google.com/accounts/ClientLogin");
-	post.setHeader("Content-Type", "application/x-www-form-urlencoded");
-	List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-	pairs.add(new BasicNameValuePair("accountType", "GOOGLE"));
-	pairs.add(new BasicNameValuePair("Email", accountuser.getText().toString()));
-	pairs.add(new BasicNameValuePair("Passwd", accountpassword.getText().toString()));
-	pairs.add(new BasicNameValuePair("service", "code"));
-	pairs.add(new BasicNameValuePair("source", "LiquidNextParts"));
-	try {
-		post.setEntity(new UrlEncodedFormEntity(pairs));
-	} catch (UnsupportedEncodingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	try {
-		HttpResponse response = client.execute(post);
-		BufferedReader in = new BufferedReader(new
-				InputStreamReader(response.getEntity().getContent()));
-				                        String line = "";
-				                        while((line = in.readLine())!= null)
-				                        if(line.substring(0,4).equals("Auth")){
-				                        	authtoken = line.substring(5,line.length());
-				                        	break;
-				                        }
-				                        in.close();
-	} catch (ClientProtocolException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	
-		    
-	String pastebin_logcat_url = "";
-	String pastebin_dmesg_url = "";
-	try {
-		pastebin_logcat_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/logcat"));
-		pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url;
-	String posturl = "https://code.google.com/feeds/issues/p/liquidnextbugtracker/issues/full";
-	String finalxml = "";
-	finalxml += "<?xml version='1.0' encoding='UTF-8'?>";
-	finalxml += "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://schemas.google.com/projecthosting/issues/2009'>";
-	finalxml += "<title>" + issuesummary.getText().toString() + "</title>";
-	finalxml += "<content type='text/plain'>" + issuedescription.getText().toString() + addpastebinlinks + "</content>";
-	finalxml += "<author><name>" + accountuser.getText().toString() + "</author></name>";
-	finalxml += "<issues:status>New</issues:status>";
-	finalxml += "<issues:owner><issues:username>" + accountuser.getText().toString() + "</issues:username></issues:owner>";
-	finalxml += "<issues:label>"+myactivity.getResources().getStringArray(R.array.issuecategory)[(int)issuecategory.getSelectedItemId()].toString()+"</issues:label>";
-	finalxml += "<issues:label>"+myactivity.getResources().getStringArray(R.array.issuepriority)[(int)issuepriority.getSelectedItemId()].toString()+"</issues:label>";
-	finalxml += "</entry>";
-	}
-	waitdialog.dismiss();	
+			ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+			android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			 	
+			if (netInfo.getState() != android.net.NetworkInfo.State.CONNECTED &&
+					wifiInfo.getState() != android.net.NetworkInfo.State.CONNECTED  ) {
+				toastmessage = "No Internet connection!";
+			}else if(/*accountuser.equals("gmail.com") ||*/ accountuser.equals("")){
+				toastmessage = "Invalid goocle account mail!";
+			}else if(accountpassword.equals("")){
+				toastmessage = "Invalid google account password!";
+			}else if(issuesummary.equals("")){
+				toastmessage = "Invalid issue summary!";
+			}else if( (int)issuecategory.getSelectedItemId()== 0){
+				toastmessage = "Invalid issue category!";
+			}else if ((int)issuepriority.getSelectedItemId() == 0){
+				toastmessage = "Invalid issue priority!";
+			}else if (!gotlogcat){
+				toastmessage = "You have to take logs!";
+			}else
+			{
+
+				Editor editor = prefs.edit();
+				editor.putString("googleaccountmail", accountuser.getText().toString());
+				editor.putString("googleaccountpassword", accountpassword.getText().toString());
+				editor.commit();
+
+				String authtoken = "";
+
+				//AUTHENTICATION
+				HttpClient client = new DefaultHttpClient();
+				HttpPost post = new HttpPost("https://www.google.com/accounts/ClientLogin");
+				post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+				List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+				pairs.add(new BasicNameValuePair("accountType", "GOOGLE"));
+				pairs.add(new BasicNameValuePair("Email", accountuser.getText().toString()));
+				pairs.add(new BasicNameValuePair("Passwd", accountpassword.getText().toString()));
+				pairs.add(new BasicNameValuePair("service", "code"));
+				pairs.add(new BasicNameValuePair("source", "LiquidNextParts"));
+				try {
+					post.setEntity(new UrlEncodedFormEntity(pairs));
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					HttpResponse response = client.execute(post);
+					BufferedReader in = new BufferedReader(new
+							InputStreamReader(response.getEntity().getContent()));
+					String line = "";
+					while((line = in.readLine())!= null)
+						if(line.substring(0,4).equals("Auth")){
+							authtoken = line.substring(5,line.length());
+							break;
+						}
+					in.close();
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+
+				String pastebin_logcat_url = "";
+				String pastebin_dmesg_url = "";
+				try {
+					pastebin_logcat_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/logcat"));
+					pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url;
+				String finalxml = "";
+				finalxml += "<?xml version='1.0' encoding='UTF-8'?>";
+				finalxml += "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://schemas.google.com/projecthosting/issues/2009'>";
+				finalxml += "<title>" + issuesummary.getText().toString() + "</title>";
+				finalxml += "<content type='html'>" + issuedescription.getText().toString() + addpastebinlinks + "</content>";
+				finalxml += "<author><name>" + accountuser.getText().toString() + "</name></author>";
+				finalxml += "<issues:status>New</issues:status>";
+				finalxml += "<issues:owner><issues:username>" + accountuser.getText().toString() + "</issues:username></issues:owner>";
+				finalxml += "<issues:label>"+myactivity.getResources().getStringArray(R.array.issuecategory)[(int)issuecategory.getSelectedItemId()].toString()+"</issues:label>";
+				finalxml += "<issues:label>"+myactivity.getResources().getStringArray(R.array.issuepriority)[(int)issuepriority.getSelectedItemId()].toString()+"</issues:label>";
+				finalxml += "</entry>";
+
+				//SEND ISSUE
+
+				// Make connection
+
+				URL url = null;
+				HttpURLConnection urlConnection;
+				try {
+					url = new URL("https://code.google.com/feeds/issues/p/liquidnextbugtracker/issues/full");
+					urlConnection = (HttpURLConnection) url.openConnection();
+					urlConnection.setRequestMethod("POST");
+					urlConnection.setRequestProperty("Connection", "close"); 
+					urlConnection.setRequestProperty("Content-Type", "application/atom+xml");
+					urlConnection.setRequestProperty("Authorization", "GoogleLogin auth="+authtoken+"");
+					urlConnection.setRequestProperty("Content-Length", Integer.toString(finalxml.length()));		
+
+					urlConnection.setDoOutput(true);		
+					OutputStreamWriter out = new OutputStreamWriter(
+							urlConnection.getOutputStream());
+
+					// Write query string to request body
+
+					out.write(finalxml);
+					out.flush();
+
+					if (urlConnection.getHeaderField(0).equals("HTTP/1.1 201 Created")){
+						toastmessage = "New issue has been sent!";
+					}else{
+						toastmessage = "ERROR: " + urlConnection.getHeaderField(0);			
+					}
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			myactivity.runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(myactivity, toastmessage, 4000).show();
+				}});
+			waitdialog.dismiss();
+		}
+	}.start();		
 	}
 }
-
-
