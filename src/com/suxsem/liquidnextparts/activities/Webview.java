@@ -43,7 +43,12 @@ public class Webview extends Activity {
 					// TODO Auto-generated method stub
 					  Toast.makeText(myactivity, "Thanks", 4000).show();
 					  this.cancel();
-					  waitdialog.dismiss();
+					  try {
+						waitdialog.dismiss();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					  NotificationHelper.adsfinish = true;
 					  if(NotificationHelper.waitflash){
 						  NotificationHelper.flashrom();
