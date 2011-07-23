@@ -23,7 +23,10 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:title="System">
 		<CheckBoxPreference android:key="hf" android:title="Haptic feedback"
-			android:summary="softkey vibration" />
+			android:summary="Enable or not softkey vibration" />
+		<EditTextPreference android:key="hftime"
+			android:title="Set softkey vibr. time" android:numeric="integer"
+			android:inputType="number" android:defaultValue="30" />
 		<EditTextPreference android:key="sdcache"
 			android:title="Set sd cache size" android:summary="@string/sdcachesum"
 			android:numeric="integer" android:inputType="number"

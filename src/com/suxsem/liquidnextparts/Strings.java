@@ -19,14 +19,15 @@ public class Strings {
 	        );	
 		}
 	
-	public static String getSens(String sens, String noise, String softkeysens){
-		return String.format("%s\n%s\n%s\n%s\n%s\n%s", 
+	public static String getSens(String sens, String noise, String softkeysens, String hftime){
+		return String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s", 
 	            "\"#!/system/bin/sh",
 	            "#script created by Liquid Settings App",
 	            "#",
 	            "echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity",
 	            "echo "+noise+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise",
-	            "echo "+softkeysens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-0066/threshold\""
+	            "echo "+softkeysens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-0066/threshold",
+	            "echo "+hftime+" > /sys/devices/platform/i2c-adapter/i2c-0/0-0066/vibr\""
 	        );
 	}
 	

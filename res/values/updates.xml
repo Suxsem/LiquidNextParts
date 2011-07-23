@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_vname">2.0.1</string>
+<string name="app_vname">2.0.4</string>
 <string name="firstflashincremental">3</string>
 <string name="previousversion">1.6</string>
 <string name="lastversion">LiquidNext 1.6.1</string>

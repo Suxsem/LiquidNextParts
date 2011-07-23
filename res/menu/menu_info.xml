@@ -33,7 +33,11 @@
     			<Preference
     				android:key="hf_help"
     				android:title="Haptic Feedback"
-    				android:summary="@string/haptic_help" /> 				
+    				android:summary="@string/haptic_help" />
+    			<Preference
+    				android:key="hftime_help"
+    				android:title="Softkey vibration time"
+    				android:summary="@string/hftime_help" />
     			<Preference
     				android:key="cache_sd_help"
     				android:title="SD Cache"

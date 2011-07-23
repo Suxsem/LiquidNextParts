@@ -57,7 +57,7 @@ public class StartSystem {
 	}
 	private void firstflash(Context context){
 		LSystem.RemountRW();
-		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16")+" > /system/etc/init.d/06sensitivity");
+		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16","30")+" > /system/etc/init.d/06sensitivity");
 		LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 		LSystem.RemountROnly();
 		LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");

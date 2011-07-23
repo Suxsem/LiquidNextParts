@@ -67,10 +67,10 @@ public class settings extends PreferenceActivity {
 	public boolean ROOT = false;
 	public boolean isFirstTime = false;
 	public SharedPreferences prefs;
-	public String noiseValue, sensitivityValue, softsensValue;
+	public String noiseValue, sensitivityValue, softsensValue, hftimeValue;
 	public int SDCacheSize;
 	private settings myactivity = this;
-	EditTextPreference editNoise, editSensitivity, editSoftsens;
+	EditTextPreference editNoise, editSensitivity, editSoftsens, editHftime;
 	public String DownloadTaskInformations = "";
 	Boolean update = false;
 	Boolean connection = false;
@@ -109,6 +109,7 @@ public class settings extends PreferenceActivity {
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
 		editSoftsens = (EditTextPreference)findPreference("softsens");
+		editHftime = (EditTextPreference)findPreference("hftime");
 		
 		if (!LSystem.hapticAvailable())
 			hf.setEnabled(false);
@@ -125,6 +126,7 @@ public class settings extends PreferenceActivity {
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
 		softsensValue = editSoftsens.getText();
+		hftimeValue = editHftime.getText();
 
 		updateValues();
 
@@ -144,7 +146,7 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -177,7 +179,7 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -209,7 +211,7 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -270,6 +272,38 @@ public class settings extends PreferenceActivity {
 			}
 
 		});
+		
+		editHftime.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (!Strings.onlyNumber(newValue.toString())){
+					Toast.makeText(context, "You must enter a numeric value!", 4000).show();
+					return false;
+				} //Check if the value is numeric, THEN assign it to sensitivityValue
+				hftimeValue = newValue.toString();
+				int hftimeValueInt = Integer.parseInt(hftimeValue);
+				if(hftimeValueInt < (10))
+					hftimeValue = ("10");
+				else if (hftimeValueInt>(2000))
+					hftimeValue=("2000");
+
+				if(ROOT) {
+					if(ROOT && LSystem.RemountRW()) {
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+						LSystem.RemountROnly();
+						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
+						else 
+							Toast.makeText(context, "Error, unable to set noise", 4000).show();
+					}
+					updateValues();
+				} else {
+					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
+				}
+				return true;
+			}
+		});		
 
 		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -480,6 +514,7 @@ public class settings extends PreferenceActivity {
 		editNoise.setSummary("Noise is set to " + noiseValue);
 		editSensitivity.setSummary("Sensitivity is set to " + sensitivityValue);		
 		editSoftsens.setSummary("Softkey sensitivity is set to "+ softsensValue);
+		editHftime.setSummary("Softkey vibration time is set to "+ hftimeValue +"ms");
 	}
 	   		               
 }
