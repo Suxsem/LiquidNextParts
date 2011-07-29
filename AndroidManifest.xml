@@ -40,7 +40,7 @@
 		         
 		<receiver android:name=".components.BootReceiver">  
     		<intent-filter>  
-        		<action android:name="android.intent.action.BOOT_COMPLETED" />  
+        		<action android:name="android.intent.action.BOOT_COMPLETED" />       		
     		</intent-filter>  
 		</receiver>
 		
@@ -49,6 +49,7 @@
                             <action android:name="android.intent.action.PHONE_STATE"/>
                         </intent-filter> 
       	</receiver>
+      	
     	<service android:enabled="true" android:name=".components.main_service"></service>
 	</application>
         <uses-permission android:name="android.permission.READ_PHONE_STATE"/>

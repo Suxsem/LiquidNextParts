@@ -51,9 +51,7 @@ public class StartSystem {
 			editor.putString("firstflash", context.getString(R.string.firstflashincremental));
 			editor.commit();
 			firstflash(context);
-		}
-
-		NetworkMode.switchnetworkmode(context);
+		}		
 	}
 	private void firstflash(Context context){
 		LSystem.RemountRW();

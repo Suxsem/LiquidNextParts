@@ -1,5 +1,6 @@
 package com.suxsem.liquidnextparts.components;
 
+import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.parsebuildprop;
 
 import android.app.Notification;
@@ -10,11 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class BootReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
         	new StartSystem().startsystem(context);
+        	NetworkMode.switchnetworkmode(context);
     		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     		if((parsebuildprop.parseInt("hw.acer.psensor_calib_min_base")==32717)!=(prefs.getBoolean("noprox", false))){
 				if (prefs.getBoolean("noprox", false)) {
