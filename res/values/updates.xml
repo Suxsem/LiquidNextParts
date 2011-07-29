@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_vname">2.0.4</string>
+<string name="app_vname">2.0.5</string>
 <string name="firstflashincremental">3</string>
-<string name="previousversion">1.6</string>
-<string name="lastversion">LiquidNext 1.6.1</string>
-<string name="size">0.1</string>
-<string name="url">http://www.multiupload.com/3AAKYKE47D</string>
-<string name="adsurl">http://adf.ly/20Zky</string>
+<string name="previousversion">ALL</string>
+<string name="lastversion">LiquidNext 1.7</string>
+<string name="size">87.52</string>
+<string name="url">http://www.multiupload.com/0PP6K6INEH</string>
+<string name="adsurl">http://adf.ly/2AoHS</string>
 <string name="lnpversioncheck">http://pastebin.com/raw.php?i=FU8JxvY5</string>
-<string name="notes"></string>
+<string name="notes">1) This update WILL WIPE AUTOMATICALLY YOUR DATA PARTITION 2) Don\'t check "Bring home app in memory" in CM settings 3) If boot splashscreen lasts more than 2 minutes pull out battery</string>
 </resources>

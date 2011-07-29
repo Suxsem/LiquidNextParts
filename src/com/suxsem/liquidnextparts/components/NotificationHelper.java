@@ -111,7 +111,6 @@ public class NotificationHelper {
 			reconnectiontimer.cancel();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
@@ -137,7 +136,6 @@ public class NotificationHelper {
 			reconnectiontimer.cancel();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
         //remove the notification from the status bar
         mNotificationManager.cancel(NOTIFICATION_ID);
@@ -174,13 +172,11 @@ public class NotificationHelper {
 			cancelled();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
     	try {
 			DownloadTask.downloadtask.cancel(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}		
     }
     public static void createnotification(CharSequence tickerText,int icon, String text1, String text2, int flag, boolean showintent){

@@ -113,7 +113,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 			try {
 				mNotificationManager.cancel(6);
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		this.finish();
 		return;
@@ -214,9 +213,7 @@ public class ReportIssue extends Activity implements OnClickListener {
 		try {
 			response = httpClient.execute(httpGet, localContext);
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		if(response==null){
 		}
@@ -229,9 +226,7 @@ public class ReportIssue extends Activity implements OnClickListener {
 					)
 			);
 		} catch (IllegalStateException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		String line = null;
@@ -318,7 +313,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 			    rootview.addView(textView);				
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 		}		
 
 		/*final Button openbugtracker = (Button)findViewById(R.id.button8);
@@ -413,9 +407,7 @@ public class ReportIssue extends Activity implements OnClickListener {
 			process.waitFor();
 
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		issuedescripttext += "PC operative system (if the issue is PC related):" + "\n-------------\n";
 		issuedescripttext += "\n";
@@ -509,7 +501,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 				try {
 					post.setEntity(new UrlEncodedFormEntity(pairs));
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
 				}
 				try {
 					HttpResponse response = client.execute(post);
@@ -523,9 +514,7 @@ public class ReportIssue extends Activity implements OnClickListener {
 						}
 					in.close();
 				} catch (ClientProtocolException e) {
-					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace();
 				}	
 
 				String pastebin_logcat_url = "";
@@ -536,7 +525,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 					pastebin_dmesg_url = UploadOnPastebin.sub_paste(new File("/cache/lnp/dmesg"));
 					pastebin_buildprop_url = UploadOnPastebin.sub_paste(new File("/system/build.prop"));
 				} catch (IOException e) {
-					e.printStackTrace();
 				}
 				String addpastebinlinks = "\n\nLOGCAT: " + pastebin_logcat_url + "\nDMESG: " + pastebin_dmesg_url + "\nBUILD.PROP: " + pastebin_buildprop_url + "\n\nPOWERED BY LIQUIDNEXTPARTS APP";
 				String finalxml = "";
@@ -593,7 +581,6 @@ public class ReportIssue extends Activity implements OnClickListener {
 					}
 					out.close();
 				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 			myactivity.runOnUiThread(new Runnable() {

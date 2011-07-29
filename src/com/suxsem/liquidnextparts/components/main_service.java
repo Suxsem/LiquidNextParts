@@ -3,7 +3,6 @@ package com.suxsem.liquidnextparts.components;
 
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
-import com.suxsem.liquidnextparts.activities.ReportIssue;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -200,11 +199,9 @@ public class main_service extends Service {
 				//wakelockwifi.release();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	public static void startcall(){
@@ -213,7 +210,6 @@ public class main_service extends Service {
 				wakelockcall.acquire();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			String tickerText = "LNP - New call...";			
 	        Notification mNotification = new Notification(android.R.drawable.stat_sys_warning, tickerText, System.currentTimeMillis());
@@ -236,13 +232,11 @@ public class main_service extends Service {
 				wakelockcall.release();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			try {
 				mNotificationManager.cancel(7);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 	}
 	public static void startota(){
@@ -251,7 +245,6 @@ public class main_service extends Service {
 			wifilockota.acquire();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	public static void stopota(){
@@ -260,7 +253,6 @@ public class main_service extends Service {
 			wifilockota.acquire();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 }	
 }

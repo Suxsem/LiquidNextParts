@@ -77,7 +77,6 @@ public class settings extends PreferenceActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
-
 		super.onCreate(savedInstanceState);
 				
 		if (!LSystem.checkInitFolder()){
@@ -87,7 +86,7 @@ public class settings extends PreferenceActivity {
 		ROOT = LiquidSettings.isRoot();
 		prefs = PreferenceManager.getDefaultSharedPreferences(myactivity);
 		new StartSystem().startsystem(myactivity);
-		addPreferencesFromResource(R.menu.menu);
+		addPreferencesFromResource(R.xml.menu);
 
 		final Context context = getApplicationContext();
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");

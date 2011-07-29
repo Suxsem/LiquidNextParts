@@ -13,7 +13,7 @@ public class InfoPreferenceActivity extends PreferenceActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.menu.menu_info);
+		addPreferencesFromResource(R.xml.menu_info);
 	}
 	@Override
 	public void onStop() {

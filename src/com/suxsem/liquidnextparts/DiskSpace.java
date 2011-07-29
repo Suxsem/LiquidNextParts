@@ -32,9 +32,7 @@ public class DiskSpace {
 			process.waitFor();
 
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		// data
 		try {
@@ -57,9 +55,7 @@ public class DiskSpace {
 			process.waitFor();
 
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		// sdcard
 		try {
@@ -82,9 +78,7 @@ public class DiskSpace {
 			process.waitFor();
 
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		// system/sd
 		try {
@@ -107,9 +101,7 @@ public class DiskSpace {
 			process.waitFor();
 
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		return	output;
 	}

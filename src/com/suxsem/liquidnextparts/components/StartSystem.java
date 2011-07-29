@@ -2,7 +2,6 @@ package com.suxsem.liquidnextparts.components;
 
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
-import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.Strings;
 

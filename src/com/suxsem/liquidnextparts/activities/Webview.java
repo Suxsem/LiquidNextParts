@@ -47,7 +47,6 @@ public class Webview extends Activity {
 						waitdialog.dismiss();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 					  NotificationHelper.adsfinish = true;
 					  if(NotificationHelper.waitflash){
@@ -111,7 +110,6 @@ public class Webview extends Activity {
 							timer_timeout.cancel();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 						timer1.start();
 						firstloading = true;

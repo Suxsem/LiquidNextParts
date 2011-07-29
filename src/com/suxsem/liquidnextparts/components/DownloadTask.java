@@ -50,7 +50,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 	private String partialfilelocation = "";
 	public static Integer previousperc = 0;
 	static NotificationHelper mNotificationHelper;
-	@SuppressWarnings("unchecked")
 	public static AsyncTask downloadtask;
 	public DownloadTask(Context context){
 		mNotificationHelper = new NotificationHelper(context);        
@@ -151,7 +150,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 					downloaded += read;
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 
 				try {
@@ -162,7 +160,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			} // end of while
 
@@ -176,7 +173,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 				}
 				catch ( IOException e )
 				{
-					e.printStackTrace();
 					return null;
 				}
 
@@ -186,7 +182,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			return null;
 		}// end of catch
 	} // end of class DownloadManager()
@@ -199,7 +194,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			OTA_updates_status.infoprogressbar.setText("Downloaded " + (int)(downloaded/1000000) +" MB of " + (int)(fileSize/1000000) + " MB ("+previousperc+"%)");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		mNotificationHelper.progressUpdate(previousperc);
 
@@ -220,7 +214,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			conn.disconnect();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		boolean error;
 		if(status == COMPLETE){    	
@@ -245,10 +238,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			response = httpClient.execute(httpGet, localContext);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		if(response==null){
 					return "error";
@@ -263,10 +254,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			);
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		String line = null;
@@ -283,7 +272,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return "error";
 	}

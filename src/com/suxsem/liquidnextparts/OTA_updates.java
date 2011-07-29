@@ -55,7 +55,6 @@ public class OTA_updates {
 			romodversioncheckarray = romodversion.split("[\\s,]+")[1].split("\\.");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 			Toast.makeText(myactivity, "ERROR in build.prop > ro.modversion", 4000).show();
 			return false;
 		}
@@ -210,10 +209,8 @@ public class OTA_updates {
 							response = httpClient.execute(httpGet, localContext);
 						} catch (ClientProtocolException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 						if(response==null){
 							classactivity.runOnUiThread(new Runnable() {
@@ -233,10 +230,8 @@ public class OTA_updates {
 							);
 						} catch (IllegalStateException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 
 						String line = null;
@@ -253,7 +248,6 @@ public class OTA_updates {
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 					}else{
 						connection = false;

@@ -24,7 +24,6 @@ public class parsebuildprop {
                                         return buffer.substring(buffer.indexOf("=")+1);
                         }
                 } catch (Exception e) {
-                        e.printStackTrace();
                 }
                
                 return "";
@@ -83,7 +82,6 @@ public class parsebuildprop {
                     LiquidSettings.runRootCommand("chmod 644 /system/build.prop");
                     LSystem.RemountROnly();
             } catch (Exception e) {
-                    e.printStackTrace();
             }
         	return;
         }
