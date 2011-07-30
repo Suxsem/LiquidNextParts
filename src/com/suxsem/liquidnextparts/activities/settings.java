@@ -374,8 +374,8 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 					try {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
-						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/xbin/v6SuperChargerLN.sh");
+						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidterm2.Term"));
+						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/xbin/V6SuperChargerLN.sh");
 						startActivity(intent);
 					} catch (Exception e) {
 						Toast.makeText(myactivity, "No terminal emulator app found", 4000).show();
