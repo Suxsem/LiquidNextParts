@@ -14,6 +14,7 @@ import com.suxsem.liquidnextparts.parsebuildprop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -100,6 +101,7 @@ public class settings extends PreferenceActivity {
 		final Preference hotreboot = findPreference("hotreboot");
 		final Preference forceupdate = findPreference("forceupdate");
 		final Preference donateclick = findPreference("donateclick");
+		final Preference v6scripttweaker = findPreference("v6scripttweaker");
 		final Preference reportissue = findPreference("reportissue");
 		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
 		final Preference resetall = findPreference("resetall");
@@ -363,6 +365,21 @@ public class settings extends PreferenceActivity {
 					}
 				});
 				builder.create().show();    							
+				return true;
+			}
+		});
+
+		v6scripttweaker.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+					try {
+						Intent intent = new Intent(Intent.ACTION_MAIN);
+						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
+						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/xbin/v6SuperChargerLN.sh");
+						startActivity(intent);
+					} catch (Exception e) {
+						Toast.makeText(myactivity, "No terminal emulator app found", 4000).show();
+					}					
 				return true;
 			}
 		});

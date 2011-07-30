@@ -37,6 +37,8 @@
 			android:entryValues="@array/nmavalue" />
 		<CheckBoxPreference android:key="noprox"
 			android:title="Disable proximity" android:summary="Disable proximity sensor" />
+		<Preference android:key="v6scripttweaker" android:title="V6 script tweaker"
+			android:summary="Set your memory management settings" />			
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Tools">
 		<Preference android:key="diskspace" android:title="Disk space"

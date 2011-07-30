@@ -263,7 +263,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		try {
 			while ((line = reader.readLine()) != null){		     	  			  
 				int start = line.indexOf("<div id=\"downloadbutton_\" style=\"\"><a href=\"") + 44;
-				int end = line.indexOf("\"><IMG SRC=\"img/but_direct.gif\" WIDTH=\"147\" HEIGHT=\"32\"");
+				int end = line.indexOf("\"",start);
 				
 				Log.d("LS", line.substring(start, end));
 
