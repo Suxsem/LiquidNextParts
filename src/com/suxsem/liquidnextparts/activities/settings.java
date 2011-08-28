@@ -1,5 +1,7 @@
 package com.suxsem.liquidnextparts.activities;
 
+import java.io.File;
+
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.DiskSpace;
@@ -31,6 +33,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -93,9 +96,10 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
-//		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
 		final CheckBoxPreference noprox = (CheckBoxPreference)findPreference("noprox");
+		final CheckBoxPreference nobottom = (CheckBoxPreference)findPreference("nobottom");
 		final CheckBoxPreference updateonstart = (CheckBoxPreference)findPreference("updateonstart");
+		final CheckBoxPreference usemetalcamera = (CheckBoxPreference)findPreference("usemetalcamera");
 		final Preference menu_info = findPreference("menu_info");
 		final Preference diskspace = findPreference("diskspace");
 		final Preference hotreboot = findPreference("hotreboot");
@@ -130,7 +134,14 @@ public class settings extends PreferenceActivity {
 		hftimeValue = editHftime.getText();
 
 		updateValues();
-
+		
+		java.io.File file = new java.io.File("/system/app/Camera.stock_lock");
+		if (!file.exists()) {
+			usemetalcamera.setChecked(false);
+		}else{
+			usemetalcamera.setChecked(true);
+		}
+		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -250,7 +261,30 @@ public class settings extends PreferenceActivity {
 				}	
 			}
 		});
-		
+
+		nobottom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				if (ROOT){
+					if (nobottom.isChecked()) {						
+						LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");
+						LiquidSettings.runRootCommand("chmod 000 /sys/class/leds2/bottom");
+					}else{
+						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/bottom");
+					}
+					if (BatteryLED.setdisable(nobottom.isChecked())){						
+						return true;
+					} else{
+						Toast.makeText(context, "Error while set Bottom LED disable", 4000).show();
+						return false;
+					}
+				}else {
+					Toast.makeText(context, "Sorry, you need ROOT permissions", 4000).show();
+					return false;
+				}	
+			}
+		});
+
 		hf.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -383,7 +417,22 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
-		
+
+		usemetalcamera.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				if (usemetalcamera.isChecked()) {
+					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.stock_lock");
+					LiquidSettings.runRootCommand("mv -f /system/app/Camera.metal_lock /system/app/Camera.apk");
+					LiquidSettings.runRootCommand("sync");
+				}else{
+					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.metal_lock");
+					LiquidSettings.runRootCommand("mv -f /system/app/Camera.stock_lock /system/app/Camera.apk");					LiquidSettings.runRootCommand("sync");
+				}
+					return true;
+			}
+		});
+
 		diskspace.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {

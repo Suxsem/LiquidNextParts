@@ -28,6 +28,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
+import android.os.PowerManager;
 import android.preference.EditTextPreference;
 import android.widget.Toast;
 
@@ -46,6 +48,11 @@ public class OTA_updates {
 	private ProgressDialog waitdialog;
 	Boolean update = false;
 	Boolean connection = false;
+	
+	public static PowerManager powermanager;
+	public static WifiManager wifimanager;
+	public static PowerManager.WakeLock wakelockota = null;
+	public static WifiManager.WifiLock wifilockota = null;
 	
 	private boolean updaterom(){		
 		String romodversion = parsebuildprop.parseString("ro.modversion");		
@@ -276,7 +283,29 @@ public class OTA_updates {
 	}
 	
 	private void startdownload(Context myactivity){
+		powermanager = (PowerManager) myactivity.getSystemService(Context.POWER_SERVICE);
+		wifimanager = (WifiManager) myactivity.getSystemService(Context.WIFI_SERVICE);
+		wakelockota = powermanager.newWakeLock(
+				PowerManager.PARTIAL_WAKE_LOCK,
+				"OTAWAKELOCK");
+		wifilockota = wifimanager.createWifiLock("OTAWIFILOCK");
+		wakelockota.setReferenceCounted(false);
+		wifilockota.setReferenceCounted(false);
+		wakelockota.acquire();
+		wifilockota.acquire();
+		
 		DownloadTask.downloadtask = new DownloadTask(myactivity).execute(myactivity.getString(R.string.url), DownloadTaskInformations);
 		myactivity.startActivity(new Intent (Intent.ACTION_VIEW).setClassName(myactivity, Webview.class.getName()));
+	}
+	
+	public static void releaselocks(){
+		try {
+			wakelockota.release();
+		} catch (Exception e) {
+		}
+		try {
+			wifilockota.release();
+		} catch (Exception e) {
+		}
 	}
 }

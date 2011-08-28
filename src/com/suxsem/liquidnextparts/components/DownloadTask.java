@@ -22,9 +22,11 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import com.suxsem.liquidnextparts.OTA_updates;
 import com.suxsem.liquidnextparts.activities.OTA_updates_status;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -121,6 +123,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 				if (isCancelled()){
 					NotificationHelper.arg = filelocation + "#" + gorecovery + "#" + partialfilelocation;
 					NotificationHelper.cancelled();
+					OTA_updates.releaselocks();
 					break;                        	
 				}
 
@@ -201,15 +204,14 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 
 	@Override
 	protected void onPreExecute()
-	{
-		main_service.startota();
+	{	
 		mNotificationHelper.createNotification();
 	}
 
 	@Override
 	protected void onPostExecute(Drawable result)
 	{
-		main_service.stopota();
+		OTA_updates.releaselocks();
 		try {
 			conn.disconnect();
 		} catch (Exception e) {

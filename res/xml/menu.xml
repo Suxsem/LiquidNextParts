@@ -14,12 +14,8 @@
 	<PreferenceCategory android:title="LED">
 		<CheckBoxPreference android:key="powerled"
 			android:title="Disable Power LED" android:summary="Disable Power LED while charging" />
-		<CheckBoxPreference android:key="fixsms"
-			android:title="Fix sms LED" android:summary="Override sms LED managment" />
-		<CheckBoxPreference android:key="bottomled"
-			android:title="Use softkey LED" android:summary="Use softkey LED as New SMS LED" />
-		<CheckBoxPreference android:key="fixcall"
-			android:title="Fix call LED" android:summary="Override call LED managment" />
+		<CheckBoxPreference android:key="nobottom"
+			android:title="Disable Bottom LEDs" android:summary="Do not use Bottom LEDs as notification LEDs" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="System">
 		<CheckBoxPreference android:key="hf" android:title="Haptic feedback"
@@ -38,7 +34,9 @@
 		<CheckBoxPreference android:key="noprox"
 			android:title="Disable proximity" android:summary="Disable proximity sensor" />
 		<Preference android:key="v6scripttweaker" android:title="V6 script tweaker"
-			android:summary="Set your memory management settings" />			
+			android:summary="Set your memory management settings" />
+		<CheckBoxPreference android:key="usemetalcamera"
+			android:title="Use Metal Camera app" android:summary="Switch between Stock and Metal Camera app and reverse. Your Camera settings will be lost!" />			
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Tools">
 		<Preference android:key="diskspace" android:title="Disk space"
@@ -67,9 +65,9 @@
 			android:data="http://code.google.com/p/liquidnextbugtracker/issues/list" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="Open LN webpage"
-		android:summary="Open LN official webpage on Modaco">
+		android:summary="Open LN official webpage on liquidnext.tk">
 		<intent android:action="android.intent.action.VIEW"
-			android:data="http://android.modaco.com/topic/341233-%E2%98%86%E2%98%86%E2%98%86-rom-gb-liquidnext-161-180711-%E2%98%86%E2%98%86%E2%98%86/" />
+			android:data="http://liquidnext.uphero.com/joomla/" />
 	</PreferenceScreen>
 	<PreferenceScreen android:title="Open LN Facebook page"
 		android:summary="Open LN official Facebook fanpage (with news!)">

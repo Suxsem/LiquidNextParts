@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class BootReceiver extends BroadcastReceiver {
         @Override
@@ -18,6 +19,7 @@ public class BootReceiver extends BroadcastReceiver {
         	new StartSystem().startsystem(context);
         	NetworkMode.switchnetworkmode(context);
     		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    	
     		if((parsebuildprop.parseInt("hw.acer.psensor_calib_min_base")==32717)!=(prefs.getBoolean("noprox", false))){
 				if (prefs.getBoolean("noprox", false)) {
 					parsebuildprop.editString("hw.acer.psensor_calib_min_base", "32717");		    	
