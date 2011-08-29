@@ -418,6 +418,7 @@ public class settings extends PreferenceActivity {
 		usemetalcamera.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
+				LSystem.RemountRW();
 				if (usemetalcamera.isChecked()) {
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.stock_lock");
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.metal_lock /system/app/Camera.apk");
@@ -428,6 +429,7 @@ public class settings extends PreferenceActivity {
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.metal_lock");
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.stock_lock /system/app/Camera.apk");					LiquidSettings.runRootCommand("sync");
 				}
+				LSystem.RemountROnly();
 					return true;
 			}
 		});

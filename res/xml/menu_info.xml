@@ -45,11 +45,7 @@
     			<Preference
     				android:key="disablebattery_help"
     				android:title="Disable Power LED"
-    				android:summary="@string/disablebattery_help" />
-    			<Preference
-    				android:key="softkeynotification_help"
-    				android:title="Use softkey LED"
-    				android:summary="@string/softkeynotification_help" />    			
+    				android:summary="@string/disablebattery_help" />		
     		</PreferenceCategory>
     	<PreferenceCategory android:title="Version">
     		<Preference
