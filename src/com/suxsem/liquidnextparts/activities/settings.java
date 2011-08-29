@@ -1,7 +1,5 @@
 package com.suxsem.liquidnextparts.activities;
 
-import java.io.File;
-
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.DiskSpace;
@@ -33,7 +31,6 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -425,6 +422,8 @@ public class settings extends PreferenceActivity {
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.stock_lock");
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.metal_lock /system/app/Camera.apk");
 					LiquidSettings.runRootCommand("sync");
+					Toast.makeText(myactivity, "Choose 480p in camera settings!", 4000).show();
+
 				}else{
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.metal_lock");
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.stock_lock /system/app/Camera.apk");					LiquidSettings.runRootCommand("sync");

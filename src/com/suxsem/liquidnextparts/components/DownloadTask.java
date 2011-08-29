@@ -26,7 +26,6 @@ import com.suxsem.liquidnextparts.OTA_updates;
 import com.suxsem.liquidnextparts.activities.OTA_updates_status;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -265,10 +264,11 @@ public class DownloadTask extends AsyncTask<String, Integer, Drawable>
 		try {
 			while ((line = reader.readLine()) != null){		     	  			  
 				int start = line.indexOf("<div id=\"downloadbutton_\" style=\"\"><a href=\"") + 44;
+				if(start==-1){
+					return "error";
+				}
 				int end = line.indexOf("\"",start);
 				
-				Log.d("LS", line.substring(start, end));
-
 				return line.substring(start, end);
 				
 			}
