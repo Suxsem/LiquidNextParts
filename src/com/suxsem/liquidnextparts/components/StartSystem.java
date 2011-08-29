@@ -45,9 +45,9 @@ public class StartSystem {
 		String firstflash = prefs.getString("firstflash", "0");
 		if(!firstflash.equals(context.getString(R.string.firstflashincremental))){			
 			editor.putString("firstflash", context.getString(R.string.firstflashincremental));
-			editor.commit();
 			firstflash(context);
-		}		
+		}
+		editor.commit();
 	}
 	private void firstflash(Context context){
 		LSystem.RemountRW();
@@ -60,9 +60,14 @@ public class StartSystem {
 		Settings.System.putInt(context.getContentResolver(), "light_sensor_custom", 1);
 		Settings.System.putInt(context.getContentResolver(), "light_decrease", 1);
 		Settings.System.putInt(context.getContentResolver(), "light_hysteresis", 0);
-		LiquidSettings.runRootCommand("sh /system/xbin/editxml.sh /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml button_led_notify false");
-		LiquidSettings.runRootCommand("sh /system/xbin/editxml.sh /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml button_always_proximity true");
-
+		
+		java.io.File file = new java.io.File("/data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml");
+		if (file.exists()) {		
+			LiquidSettings.runRootCommand("sh /system/xbin/editxml.sh /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml button_led_notify false");
+			LiquidSettings.runRootCommand("sh /system/xbin/editxml.sh /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml button_always_proximity true");
+		}else{
+			LiquidSettings.runRootCommand("echo '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"button_always_proximity\" value=\"true\" /><boolean name=\"button_led_notify\" value=\"false\" /></map>' > /data/data/com.android.phone/shared_prefs/com.android.phone_preferences.xml");
+		}
 		int icon = android.R.drawable.stat_sys_warning;
 		CharSequence tickerText = "System need a REBOOT"; //Initial text that appears in the status bar
 		long when = System.currentTimeMillis();
