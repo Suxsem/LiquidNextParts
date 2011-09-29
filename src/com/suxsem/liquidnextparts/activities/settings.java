@@ -98,11 +98,14 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference updateonstart = (CheckBoxPreference)findPreference("updateonstart");
 		final CheckBoxPreference usemetalcamera = (CheckBoxPreference)findPreference("usemetalcamera");
 		final Preference menu_info = findPreference("menu_info");
+		final Preference mountsystem = findPreference("mountsystem");
 		final Preference diskspace = findPreference("diskspace");
 		final Preference hotreboot = findPreference("hotreboot");
 		final Preference forceupdate = findPreference("forceupdate");
 		final Preference donateclick = findPreference("donateclick");
 		final Preference v6scripttweaker = findPreference("v6scripttweaker");
+		final Preference sdmanscripttweaker = findPreference("sdmanscripttweaker");
+		final Preference sdmanscript = findPreference("sdmanscript");
 		final Preference reportissue = findPreference("reportissue");
 		final ListPreference networkmode = (ListPreference)findPreference("2g3gmode");
 		final Preference resetall = findPreference("resetall");
@@ -405,7 +408,7 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 					try {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidterm2.Term"));
+						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
 						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/xbin/V6SuperChargerLN.sh");
 						startActivity(intent);
 					} catch (Exception e) {
@@ -414,7 +417,29 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
+		sdmanscripttweaker.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
+			public boolean onPreferenceClick(Preference preference) {
+					try {
+						Intent intent = new Intent(Intent.ACTION_MAIN);
+						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
+						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/bin/sdman");
+						startActivity(intent);
+					} catch (Exception e) {
+						Toast.makeText(myactivity, "No terminal emulator app found", 4000).show();
+					}					
+				return true;
+			}
+		});
+		sdmanscript.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(myactivity, SDMAN.class.getName());
+				startActivity(myintent);					
+				return true;
+			}
+		});
 		usemetalcamera.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -433,7 +458,29 @@ public class settings extends PreferenceActivity {
 					return true;
 			}
 		});
+		mountsystem.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
+			public boolean onPreferenceClick(Preference preference) {
+				final AlertDialog.Builder builder = new AlertDialog.Builder(myactivity);
+				builder.setTitle("Mount system as...");
+				builder.setCancelable(true);         
+				builder.setMessage("Choose RW if you want to write into system parition (read-write). Choose RO if you want to write-protect system partition (read-only). NOTICE: after a reboot system partition will be mounted as RO!");
+				builder.setPositiveButton("RW", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						LSystem.RemountRW();
+						Toast.makeText(myactivity, "Done", 4000).show();
+					}
+				});
+				builder.setNegativeButton("RO", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						LSystem.RemountROnly();
+						Toast.makeText(myactivity, "Done", 4000).show();
+					}
+				});
+				builder.create().show();
+				return true;
+			}
+		});
 		diskspace.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {

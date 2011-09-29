@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title=" Screen">
+	<PreferenceCategory android:title="Screen">
 		<EditTextPreference android:key="noise"
 			android:title="Set noise" android:numeric="integer"
 			android:inputType="number" android:defaultValue="70" />
@@ -18,33 +18,40 @@
 			android:title="Disable Bottom LEDs" android:summary="Do not use Bottom LEDs as notification LEDs" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="System">
+		<Preference android:key="sdmanscript" android:title="SDMAN (apps2sd)"
+			android:summary="Move your apps to sd-ext partition" />		
 		<CheckBoxPreference android:key="hf" android:title="Haptic feedback"
 			android:summary="Enable or not softkey vibration" />
 		<EditTextPreference android:key="hftime"
 			android:title="Set softkey vibr. time" android:numeric="integer"
 			android:inputType="number" android:defaultValue="30" />
-		<EditTextPreference android:key="sdcache"
-			android:title="Set sd cache size" android:summary="@string/sdcachesum"
-			android:numeric="integer" android:inputType="number"
-			android:defaultValue="2048" />
 		<ListPreference android:title="2G/3G mode"
 			android:summary="Set network mode" android:key="2g3gmode"
 			android:defaultValue="nm3" android:entries="@array/nma"
 			android:entryValues="@array/nmavalue" />
 		<CheckBoxPreference android:key="noprox"
 			android:title="Disable proximity" android:summary="Disable proximity sensor" />
-		<Preference android:key="v6scripttweaker" android:title="V6 script tweaker"
-			android:summary="Set your memory management settings" />
 		<CheckBoxPreference android:key="usemetalcamera"
 			android:title="Use Metal Camera app" android:summary="Switch between Stock and Metal Camera app and reverse. Your Camera settings will be lost!" />			
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Tools">
+		<Preference android:key="mountsystem" android:title="Mount system as..."
+			android:summary="Mount system partition as RW or RO" />
 		<Preference android:key="diskspace" android:title="Disk space"
 			android:summary="View disk space usage" />
 		<Preference android:key="hotreboot" android:title="Hot reboot"
 			android:summary="Reboot only the Android shell" />
+	</PreferenceCategory>			
+	<PreferenceCategory android:title="Advanced settings">
+		<Preference android:key="sdmanscripttweaker" android:title="SDMAN script tweaker"
+			android:summary="Access advanced features of sdman script" />	
+		<EditTextPreference android:key="sdcache"
+			android:title="Set sd cache size" android:summary="@string/sdcachesum"
+			android:numeric="integer" android:inputType="number"
+			android:defaultValue="2048" />
+		<Preference android:key="v6scripttweaker" android:title="V6 script tweaker"
+			android:summary="Set your memory management settings" />	
 	</PreferenceCategory>
-
 	<PreferenceCategory android:title="LiquidNext">
 		<Preference android:key="donateclick" android:title="Give us a click!"
 			android:summary="When you can, give us a click, thanks!" />

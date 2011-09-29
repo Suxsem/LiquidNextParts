@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory android:title="SD-EXT">
+		<Preference android:key="sdman_sdext_recovery" android:title="Create sd-ext partition"
+			android:summary="Reboot in recovery to create sd-ext partition" />	
+		<CheckBoxPreference android:key="sdman_app"
+			android:title="Apps on sd-ext" android:summary="Move apps to sd-ext partition partition instead of data. THIS ACTION WILL REBOOT YOUR DEVICE!" />
+		<CheckBoxPreference android:key="sdman_data"
+			android:title="Data on sd-ext" android:summary="Move data to sd-ext partition partition instead of data. THIS ACTION WILL REBOOT YOUR DEVICE!" />
+		<CheckBoxPreference android:key="sdman_dalvik"
+			android:title="Dalvik on sd-ext" android:summary="Move dalvik-cache to sd-ext partition instead of data. THIS ACTION WILL REBOOT YOUR DEVICE!" />
+		<CheckBoxPreference android:key="sdman_download"
+			android:title="Downloads on data" android:summary="Move download folder to data instead of cache. THIS ACTION WILL REBOOT YOUR DEVICE!" />
+</PreferenceCategory>
+<PreferenceCategory android:title="SWAP">
+		<Preference android:key="sdman_swap_recovery" android:title="Create swap partition"
+			android:summary="Reboot in recovery to create swap partition" />
+		<CheckBoxPreference android:key="sdman_swap"
+			android:title="Enable swap" android:summary="Extend you RAM with your swap partition" />
+		<EditTextPreference android:key="sdman_swappyness"
+			android:title="Set swappiness" android:numeric="integer"
+			android:inputType="number" android:defaultValue="64" />
+</PreferenceCategory>						
+</PreferenceScreen>

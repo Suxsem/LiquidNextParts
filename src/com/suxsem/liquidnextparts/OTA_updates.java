@@ -69,7 +69,11 @@ public class OTA_updates {
 		Integer romodversioncheckarraynumber = 0;
 		Integer lastversioncheckarraynumber = 0;
 		for (int i = 0; i < romodversioncheckarray.length; i++){
-			romodversioncheckarraynumber = romodversioncheckarraynumber + (int) Math.pow(10, 3-i) * Integer.valueOf(romodversioncheckarray[i]);
+			try {
+				romodversioncheckarraynumber = romodversioncheckarraynumber + (int) Math.pow(10, 3-i) * Integer.valueOf(romodversioncheckarray[i]);
+			} catch (NumberFormatException e) {
+				return false;
+			}
 		}
 		for (int i = 0; i < lastversioncheckarray.length; i++){
 			lastversioncheckarraynumber = lastversioncheckarraynumber + (int) Math.pow(10, 3-i) * Integer.valueOf(lastversioncheckarray[i]);
