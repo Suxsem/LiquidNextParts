@@ -408,7 +408,7 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 					try {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
+						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidterm2.Term"));
 						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/xbin/V6SuperChargerLN.sh");
 						startActivity(intent);
 					} catch (Exception e) {
@@ -422,7 +422,7 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 					try {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.setComponent(new ComponentName("jackpal.androidterm", "jackpal.androidterm.Term"));
+						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidter2.Term"));
 						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/bin/sdman");
 						startActivity(intent);
 					} catch (Exception e) {
@@ -447,12 +447,15 @@ public class settings extends PreferenceActivity {
 				if (usemetalcamera.isChecked()) {
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.stock_lock");
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.metal_lock /system/app/Camera.apk");
+					LiquidSettings.runRootCommand("chmod 777 /system/app/Camera.apk");
 					LiquidSettings.runRootCommand("sync");
 					Toast.makeText(myactivity, "Choose 480p in camera settings!", 4000).show();
 
 				}else{
 					LiquidSettings.runRootCommand("mv -f /system/app/Camera.apk /system/app/Camera.metal_lock");
-					LiquidSettings.runRootCommand("mv -f /system/app/Camera.stock_lock /system/app/Camera.apk");					LiquidSettings.runRootCommand("sync");
+					LiquidSettings.runRootCommand("mv -f /system/app/Camera.stock_lock /system/app/Camera.apk");
+					LiquidSettings.runRootCommand("chmod 777 /system/app/Camera.apk");
+					LiquidSettings.runRootCommand("sync");
 				}
 				LSystem.RemountROnly();
 					return true;

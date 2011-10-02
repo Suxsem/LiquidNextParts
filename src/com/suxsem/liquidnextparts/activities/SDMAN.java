@@ -112,7 +112,8 @@ public class SDMAN extends PreferenceActivity {
 		});
 		sdman_swappyness.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				LiquidSettings.runRootCommand("echo "+sdman_swappyness.getText()+" > /proc/sys/vm/swappiness");
+				LiquidSettings.runRootCommand("echo "+newValue+" > /proc/sys/vm/swappiness");
+				checkstatus();
 				return true;
 			}
 		});
