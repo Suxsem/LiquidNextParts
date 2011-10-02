@@ -85,6 +85,7 @@ public class settings extends PreferenceActivity {
 			this.finish(); //Exit app
 		}		
 		ROOT = LiquidSettings.isRoot();
+		
 		prefs = PreferenceManager.getDefaultSharedPreferences(myactivity);
 		new StartSystem().startsystem(myactivity);
 		addPreferencesFromResource(R.xml.menu);

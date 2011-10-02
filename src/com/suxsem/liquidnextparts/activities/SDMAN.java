@@ -150,7 +150,16 @@ public class SDMAN extends PreferenceActivity {
 					DataInputStream osRes = new DataInputStream(process
 							.getInputStream());
 
-					os.writeBytes("sdman -Z\n");
+					String commandtemp = "echo ";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"SDPA\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"SDSW\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"APXT\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"DTXT\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"DCXT\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"DLDT\" | awk '{print $2}')";
+					commandtemp += "$(cat \"/data/.sdman\" | grep \"SWEN\" | awk '{print $2}')";
+					commandtemp += "\n";
+					os.writeBytes(commandtemp);
 
 					result = osRes.readLine();
 
@@ -162,13 +171,13 @@ public class SDMAN extends PreferenceActivity {
 				} catch (IOException e) {
 				} catch (InterruptedException e) {
 				}
-				sdman_ext_exist_value = result.substring(0, 1).equals("e");
-				sdman_swap_exist_value = result.substring(1, 2).equals("e");
-				sdman_app_value = result.substring(2, 3).equals("e");
-				sdman_data_value = result.substring(3, 4).equals("e");
-				sdman_dalvik_value = result.substring(4, 5).equals("e");
-				sdman_download_value = result.substring(5, 6).equals("e");
-				sdman_swap_value = result.substring(6, 7).equals("e");
+				sdman_ext_exist_value = result.substring(0, 1).equals("1");
+				sdman_swap_exist_value = result.substring(1, 2).equals("1");
+				sdman_app_value = result.substring(2, 3).equals("1");
+				sdman_data_value = result.substring(3, 4).equals("1");
+				sdman_dalvik_value = result.substring(4, 5).equals("1");
+				sdman_download_value = result.substring(5, 6).equals("1");
+				sdman_swap_value = result.substring(6, 7).equals("1");
 				
 				result = "";
 				try {
