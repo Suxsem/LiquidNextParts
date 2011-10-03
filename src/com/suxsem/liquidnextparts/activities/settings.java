@@ -2,6 +2,7 @@ package com.suxsem.liquidnextparts.activities;
 
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.BatteryLED;
+import com.suxsem.liquidnextparts.BottomLED;
 import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
@@ -273,7 +274,7 @@ public class settings extends PreferenceActivity {
 					}else{
 						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/bottom");
 					}
-					if (BatteryLED.setdisable(nobottom.isChecked())){						
+					if (BottomLED.setdisable(nobottom.isChecked())){						
 						return true;
 					} else{
 						Toast.makeText(context, "Error while set Bottom LED disable", 4000).show();
@@ -372,10 +373,13 @@ public class settings extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
+				Editor editor = prefs.edit();
+				editor.putString("2g3gmode", newValue.toString());
+				editor.commit();
 				NetworkMode.switchnetworkmode(myactivity);
 				return true;
 			}
-		});
+		});		
 		
 		noprox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -596,6 +600,13 @@ public class settings extends PreferenceActivity {
 		resetall.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
+				LSystem.RemountRW();
+				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06sensitivity");
+				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/10batteryled");
+				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06vibrate");
+				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/11bottomled");
+				LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
+				LSystem.RemountROnly();
 				Editor editor = prefs.edit();
 				editor.putBoolean("firststart", true);
 				editor.commit();
