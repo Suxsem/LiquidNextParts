@@ -427,7 +427,7 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 					try {
 						Intent intent = new Intent(Intent.ACTION_MAIN);
-						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidter2.Term"));
+						intent.setComponent(new ComponentName("jackpal.androidterm2", "jackpal.androidterm2.Term"));
 						intent.putExtra("jackpal.androidterm.iInitialCommand", "su \r sh /system/bin/sdman");
 						startActivity(intent);
 					} catch (Exception e) {
