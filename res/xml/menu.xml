@@ -14,8 +14,8 @@
 	<PreferenceCategory android:title="LED">
 		<CheckBoxPreference android:key="powerled"
 			android:title="Disable Power LED" android:summary="Disable Power LED while charging" />
-		<CheckBoxPreference android:key="nobottom"
-			android:title="Disable Bottom LEDs" android:summary="Do not use Bottom LEDs as notification LEDs" />
+		<CheckBoxPreference android:key="bottomled"
+			android:title="Enable Bottom LEDs" android:summary="Use Bottom LEDs as notification LEDs (drain more battery than normal)" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="System">
 		<Preference android:key="sdmanscript" android:title="SDMAN (apps2sd)"

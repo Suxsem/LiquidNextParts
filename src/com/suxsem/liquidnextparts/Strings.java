@@ -66,17 +66,6 @@ public class Strings {
 	            "echo 0 > /sys/class/leds2/power",
 	            "chmod 000 /sys/class/leds2/power\""
 	        );
-	}	
-
-	public static String bottomleddisable(){
-		return String.format("%s\n%s\n%s\n%s\n%s", 
-	            "\"#!/system/bin/sh",
-	            "#script created by liquid custom settings",
-	            "#",
-	            "echo 0 > /sys/class/leds2/bottom",
-	            "chmod 000 /sys/class/leds2/bottom\""
-	        );
-	}	
-
+	}
 }
 

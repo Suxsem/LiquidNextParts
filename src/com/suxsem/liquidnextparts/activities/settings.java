@@ -2,7 +2,6 @@ package com.suxsem.liquidnextparts.activities;
 
 import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.BatteryLED;
-import com.suxsem.liquidnextparts.BottomLED;
 import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
 import com.suxsem.liquidnextparts.LiquidSettings;
@@ -29,6 +28,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.Settings;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -96,7 +96,7 @@ public class settings extends PreferenceActivity {
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
 		final CheckBoxPreference noprox = (CheckBoxPreference)findPreference("noprox");
-		final CheckBoxPreference nobottom = (CheckBoxPreference)findPreference("nobottom");
+		final CheckBoxPreference bottomled = (CheckBoxPreference)findPreference("bottomled");
 		final CheckBoxPreference updateonstart = (CheckBoxPreference)findPreference("updateonstart");
 		final CheckBoxPreference usemetalcamera = (CheckBoxPreference)findPreference("usemetalcamera");
 		final Preference menu_info = findPreference("menu_info");
@@ -264,21 +264,16 @@ public class settings extends PreferenceActivity {
 			}
 		});
 
-		nobottom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		bottomled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
 				if (ROOT){
-					if (nobottom.isChecked()) {						
-						LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");
-						LiquidSettings.runRootCommand("chmod 000 /sys/class/leds2/bottom");
-					}else{
-						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/bottom");
-					}
-					if (BottomLED.setdisable(nobottom.isChecked())){						
+					if (bottomled.isChecked()) {						
+						Settings.System.putInt(context.getContentResolver(), "enable_bottom_led_notification", 1);
 						return true;
-					} else{
-						Toast.makeText(context, "Error while set Bottom LED disable", 4000).show();
-						return false;
+						}else{
+						Settings.System.putInt(context.getContentResolver(), "enable_bottom_led_notification", 0);
+						return true;
 					}
 				}else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions", 4000).show();
@@ -604,7 +599,6 @@ public class settings extends PreferenceActivity {
 				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06sensitivity");
 				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/10batteryled");
 				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06vibrate");
-				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/11bottomled");
 				LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
 				LSystem.RemountROnly();
 				Editor editor = prefs.edit();
