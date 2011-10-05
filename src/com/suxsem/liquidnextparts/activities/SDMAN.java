@@ -38,6 +38,7 @@ public class SDMAN extends PreferenceActivity {
 	private Integer sdman_swappyness_value;
 	private ProgressDialog waitdialog;
 	private SDMAN myactivity;
+	private String swappiness;
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
@@ -112,8 +113,19 @@ public class SDMAN extends PreferenceActivity {
 		});
 		sdman_swappyness.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				LiquidSettings.runRootCommand("echo "+newValue+" > /proc/sys/vm/swappiness");
-				checkstatus();
+				swappiness = newValue.toString();
+				new Thread()
+				{
+					public void run() 
+					{
+						LiquidSettings.runRootCommand("sdman -e swpy "+swappiness);
+						myactivity.runOnUiThread(new Runnable() {
+							public void run() {
+								waitdialog.dismiss();
+								checkstatus();
+							}
+						});
+					}}.start();
 				return true;
 			}
 		});
@@ -246,6 +258,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -260,6 +273,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -274,6 +288,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -288,6 +303,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -302,6 +318,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -316,6 +333,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -330,6 +348,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -345,6 +364,7 @@ public class SDMAN extends PreferenceActivity {
 						public void run() {
 							waitdialog.dismiss();
 							Toast.makeText(myactivity, "No need to reboot. Done", 4000).show();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -359,6 +379,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -373,6 +394,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
@@ -387,6 +409,7 @@ public class SDMAN extends PreferenceActivity {
 					myactivity.runOnUiThread(new Runnable() {
 						public void run() {
 							waitdialog.dismiss();
+							checkstatus();
 						}
 					});
 				}}.start();
