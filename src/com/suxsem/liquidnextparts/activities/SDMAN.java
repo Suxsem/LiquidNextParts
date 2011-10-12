@@ -9,13 +9,16 @@ import java.io.IOException;
 import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 
 public class SDMAN extends PreferenceActivity {
@@ -27,6 +30,7 @@ public class SDMAN extends PreferenceActivity {
 	private CheckBoxPreference sdman_swap;
 	private Preference sdman_sdext_recovery;
 	private Preference sdman_swap_recovery;
+	private Preference sdman_update;
 	private EditTextPreference sdman_swappyness;
 	private boolean sdman_ext_exist_value;
 	private boolean sdman_swap_exist_value;
@@ -39,6 +43,7 @@ public class SDMAN extends PreferenceActivity {
 	private ProgressDialog waitdialog;
 	private SDMAN myactivity;
 	private String swappiness;
+	private String sdman_update_value;
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
@@ -48,6 +53,7 @@ public class SDMAN extends PreferenceActivity {
 		sdman_swappyness = (EditTextPreference)findPreference("sdman_swappyness");
 		sdman_sdext_recovery = findPreference("sdman_sdext_recovery");
 		sdman_swap_recovery = findPreference("sdman_swap_recovery");
+		sdman_update = findPreference("sdman_update");
 		sdman_app = (CheckBoxPreference)findPreference("sdman_app");
 		sdman_data = (CheckBoxPreference)findPreference("sdman_data");
 		sdman_dalvik = (CheckBoxPreference)findPreference("sdman_dalvik");
@@ -56,14 +62,28 @@ public class SDMAN extends PreferenceActivity {
 		
 		checkstatus();
 
-		sdman_sdext_recovery.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
+		sdman_sdext_recovery.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
 					return sdman_set("recovery");
 			}
 		});
-		sdman_swap_recovery.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
+		sdman_swap_recovery.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
 					return sdman_set("recovery");
+			}
+		});
+		sdman_update.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+				ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+				android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+				android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+						wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+					return sdman_set("update");
+				}else{
+					Toast.makeText(myactivity, "ERROR: NO CONNECTIONS!", 4000).show();
+					return false;
+				}
 			}
 		});
 		sdman_app.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -73,7 +93,7 @@ public class SDMAN extends PreferenceActivity {
 				}else{
 					return sdman_set("appoff");
 				}
-			}
+			} 
 		});
 		sdman_data.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -212,6 +232,29 @@ public class SDMAN extends PreferenceActivity {
 				} catch (InterruptedException e) {
 				}
 				sdman_swappyness_value = Integer.valueOf(result);
+				
+				result = "";
+				try {
+
+					Process process = Runtime.getRuntime().exec("su");
+					DataOutputStream os = new DataOutputStream(process
+							.getOutputStream());
+					DataInputStream osRes = new DataInputStream(process
+							.getInputStream());
+
+					os.writeBytes("sdman -v | head -n2 | tail -n1 | awk -F'v.' '{print $2}'\n");
+
+					result = osRes.readLine();					
+					os.flush();
+					os.writeBytes("exit\n");
+					os.flush();
+					process.waitFor();
+
+				} catch (IOException e) {
+				} catch (InterruptedException e) {
+				}
+				sdman_update_value = result;
+
 				myactivity.runOnUiThread(new Runnable() {
 					public void run() {
 						updatemenu();
@@ -239,16 +282,32 @@ public class SDMAN extends PreferenceActivity {
 		}
 		sdman_swappyness.setText(String.valueOf(sdman_swappyness_value));
 		sdman_swappyness.setSummary("Current value: "+String.valueOf(sdman_swappyness_value));
+		sdman_update.setSummary("Current version: "+String.valueOf(sdman_update_value));
 		sdman_app.setChecked(sdman_app_value);
 		sdman_data.setChecked(sdman_data_value);
 		sdman_dalvik.setChecked(sdman_dalvik_value);
 		sdman_download.setChecked(sdman_download_value);
 		sdman_swap.setChecked(sdman_swap_value);
-	}
+	}	
 	
 	private boolean sdman_set(String arg){
 		waitdialog = ProgressDialog.show(myactivity, "", 
 				"Applying changes... This can take a long time... PLEASE BE PATIENT", true);
+		if(arg.equals("update")){
+			new Thread()
+			{
+				public void run() 
+				{
+					LiquidSettings.runRootCommand("sdman -u");
+					myactivity.runOnUiThread(new Runnable() {
+						public void run() {
+							waitdialog.dismiss();
+							checkstatus();
+						}
+					});
+				}}.start();
+			return true;
+		}
 		if(arg.equals("appon")){
 			new Thread()
 			{

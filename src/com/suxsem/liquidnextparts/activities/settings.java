@@ -10,6 +10,7 @@ import com.suxsem.liquidnextparts.OTA_updates;
 import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.SdCache;
 import com.suxsem.liquidnextparts.Strings;
+import com.suxsem.liquidnextparts.UndervoltedKernel;
 import com.suxsem.liquidnextparts.parsebuildprop;
 
 import android.app.AlertDialog;
@@ -95,6 +96,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
+		final CheckBoxPreference undervoltedkernel = (CheckBoxPreference)findPreference("useundervoltedkernel");
 		final CheckBoxPreference noprox = (CheckBoxPreference)findPreference("noprox");
 		final CheckBoxPreference bottomled = (CheckBoxPreference)findPreference("bottomled");
 		final CheckBoxPreference updateonstart = (CheckBoxPreference)findPreference("updateonstart");
@@ -143,6 +145,7 @@ public class settings extends PreferenceActivity {
 		}else{
 			usemetalcamera.setChecked(true);
 		}
+		usemetalcamera.setChecked(UndervoltedKernel.checkenabled());
 		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -263,6 +266,24 @@ public class settings extends PreferenceActivity {
 				}	
 			}
 		});
+		
+		undervoltedkernel.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				if (ROOT){
+					if (UndervoltedKernel.setenabled(undervoltedkernel.isChecked())){
+						//LiquidSettings.runRootCommand("reboot");
+						return true;
+					} else{
+						Toast.makeText(context, "Error while set Power LED disable", 4000).show();
+						return false;
+					}
+				}else {
+					Toast.makeText(context, "Sorry, you need ROOT permissions", 4000).show();
+					return false;
+				}	
+			}
+		});		
 
 		bottomled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 

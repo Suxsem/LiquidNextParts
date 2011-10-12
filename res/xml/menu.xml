@@ -32,7 +32,9 @@
 		<CheckBoxPreference android:key="noprox"
 			android:title="Disable proximity" android:summary="Disable proximity sensor" />
 		<CheckBoxPreference android:key="usemetalcamera"
-			android:title="Use Metal Camera app" android:summary="Switch between Stock and Metal Camera app and reverse. Your Camera settings will be lost!" />			
+			android:title="Use Metal Camera app" android:summary="Switch between Stock and Metal Camera app and reverse. Your Camera settings will be lost!" />
+		<CheckBoxPreference android:key="useundervoltedkernel"
+			android:title="Use Undervolted Kernel" android:summary="Drain less battery but could make the system unstable. THIS ACTION WILL REBOOT YOUR DEVICE!" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Tools">
 		<Preference android:key="mountsystem" android:title="Mount system as..."

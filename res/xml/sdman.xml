@@ -20,5 +20,9 @@
 		<EditTextPreference android:key="sdman_swappyness"
 			android:title="Set swappiness" android:numeric="integer"
 			android:inputType="number" android:defaultValue="64" />
+</PreferenceCategory>
+<PreferenceCategory android:title="INFO">
+		<Preference android:key="sdman_update" android:title="Update SDMAN bin"
+			android:summary="" />
 </PreferenceCategory>						
 </PreferenceScreen>

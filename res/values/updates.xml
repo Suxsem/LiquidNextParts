@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_vname">2.2.1</string>
+<string name="app_vname">2.2.3</string>
 <string name="firstflashincremental">4</string>
 <string name="previousversion">ALL</string>
-<string name="lastversion">LiquidNext 1.8</string>
-<string name="size">84</string>
-<string name="url">http://www.multiupload.com/BF0AM6BZ76</string>
+<string name="lastversion">LiquidNext 1.9</string>
+<string name="size">85.95</string>
+<string name="url">http://www.multiupload.com/VEI68ITWA5</string>
 <string name="adsurl">http://adf.ly/2AoHS</string>
 <string name="lnpversioncheck">http://pastebin.com/raw.php?i=FU8JxvY5</string>
-<string name="notes"></string>
+<string name="notes">1) This update WILL WIPE AUTOMATICALLY YOUR DATA PARTITION 2) If you want app2sd, open LiquidNextParts and press SDMAN</string>
 </resources>
