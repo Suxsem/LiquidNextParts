@@ -272,7 +272,7 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				if (ROOT){
 					if (UndervoltedKernel.setenabled(undervoltedkernel.isChecked())){
-						//LiquidSettings.runRootCommand("reboot");
+						LiquidSettings.runRootCommand("reboot");
 						return true;
 					} else{
 						Toast.makeText(context, "Error while set Power LED disable", 4000).show();

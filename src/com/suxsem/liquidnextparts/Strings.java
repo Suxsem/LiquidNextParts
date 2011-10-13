@@ -69,10 +69,13 @@ public class Strings {
 	}
 	
 	public static String UndervoltedKernel(){
-		return String.format("%s\n%s\n%s\n%s","\"#!/system/bin/sh",
+		return String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s","\"#!/system/bin/sh",
 				"#script created by Liquid Settings App",
 				"#",
-				"cat /system/etc/undervolted_kernel_values > /sys/devices/system/cpu/cpu0/cpufreq/vdd_levels\""
+				"while read line",
+				"do",
+				"echo \\$line > /sys/devices/system/cpu/cpu0/cpufreq/vdd_levels",
+				"done < /etc/undervolted_kernel_values\""
 				);
 	}
 }
