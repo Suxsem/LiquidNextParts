@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.preference.EditTextPreference;
 import android.widget.Toast;
@@ -53,6 +54,111 @@ public class OTA_updates {
 	public static WifiManager wifimanager;
 	public static PowerManager.WakeLock wakelockota = null;
 	public static WifiManager.WifiLock wifilockota = null;
+	
+	public void checkupdates(Context myactivitytemp, settings classactivitytemp){
+		myactivity = myactivitytemp;
+		classactivity = classactivitytemp;
+		File file = new File(Environment.getExternalStorageDirectory(), "liquidnexttester" );
+		if (file.exists()) {
+		  return;
+		}
+		waitdialog = ProgressDialog.show(myactivity, "", 
+				"Checking for updates...", true);
+
+		new Thread()
+		{
+			public void run() 
+			{
+
+				try
+				{
+					ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+					android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+					android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+					if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
+							wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
+						connection = true;
+						HttpParams httpParameters = new BasicHttpParams();
+						HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
+						HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+						HttpClient httpClient = new DefaultHttpClient(httpParameters);
+						HttpContext localContext = new BasicHttpContext();
+						HttpGet httpGet = new HttpGet(myactivity.getString(R.string.lnpversioncheck));					
+						HttpResponse response = null;
+						try {
+							response = httpClient.execute(httpGet, localContext);
+						} catch (ClientProtocolException e) {
+							// TODO Auto-generated catch block
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+						}
+						if(response==null){
+							classactivity.runOnUiThread(new Runnable() {
+								public void run() {									
+									Toast.makeText(myactivity, "Server error", 4000).show();
+									return;
+								}
+							});
+						}
+
+						BufferedReader reader = null;
+						try {
+							reader = new BufferedReader(
+									new InputStreamReader(
+											response.getEntity().getContent()
+									)
+							);
+						} catch (IllegalStateException e) {
+							// TODO Auto-generated catch block
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+						}
+
+						String line = null;
+						update = false;
+						try {
+							while ((line = reader.readLine()) != null){
+									if(!myactivity.getString(R.string.app_vname).equals(line.substring(0,5))){
+										update = true;
+										Intent intent = new Intent(Intent.ACTION_VIEW);
+										intent.setData(Uri.parse("market://details?id=com.suxsem.liquidnextparts"));
+										myactivity.startActivity(intent);
+										line = null;
+									}
+									if(line.substring(0,5).equals("works")){
+										update = true;
+										Toast.makeText(myactivity, "Updating server... Check later", 4000).show();
+										line = null;
+									}									
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+						}
+					}else{
+						connection = false;
+					}
+					classactivity.runOnUiThread(new Runnable() {
+						public void run() {
+							if(update==false){	        			
+								if(!updaterom()){
+									if(connection){
+										Toast.makeText(myactivity, "No new ROM updates", 4000).show();
+									}else{
+										Toast.makeText(myactivity, "No Internet connection", 4000).show();	                
+									}
+								}
+							}		
+						}
+					});        	
+				}
+				catch (Exception e)
+				{
+				}
+				// dismiss the progressdialog
+				waitdialog.dismiss();
+			}
+		}.start();		   
+	}
 	
 	private boolean updaterom(){		
 		String romodversion = parsebuildprop.parseString("ro.modversion");		
@@ -184,105 +290,6 @@ public class OTA_updates {
 
 		}
 		return false;    	    	
-	}
-	public void checkupdates(Context myactivitytemp, settings classactivitytemp){
-		if(parsebuildprop.parseString("ro.modversion").indexOf("b")!=-1){
-			return;
-		}
-		myactivity = myactivitytemp;
-		classactivity = classactivitytemp;
-		
-		waitdialog = ProgressDialog.show(myactivity, "", 
-				"Checking for updates...", true);
-
-		new Thread()
-		{
-			public void run() 
-			{
-
-				try
-				{
-					ConnectivityManager connManager =  (ConnectivityManager)myactivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-					android.net.NetworkInfo netInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-					android.net.NetworkInfo wifiInfo= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-					if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED ||
-							wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED  ) {
-						connection = true;
-						HttpParams httpParameters = new BasicHttpParams();
-						HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
-						HttpConnectionParams.setSoTimeout(httpParameters, 10000);
-						HttpClient httpClient = new DefaultHttpClient(httpParameters);
-						HttpContext localContext = new BasicHttpContext();
-						HttpGet httpGet = new HttpGet(myactivity.getString(R.string.lnpversioncheck));					
-						HttpResponse response = null;
-						try {
-							response = httpClient.execute(httpGet, localContext);
-						} catch (ClientProtocolException e) {
-							// TODO Auto-generated catch block
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-						}
-						if(response==null){
-							classactivity.runOnUiThread(new Runnable() {
-								public void run() {									
-									Toast.makeText(myactivity, "Server error", 4000).show();
-									return;
-								}
-							});
-						}
-
-						BufferedReader reader = null;
-						try {
-							reader = new BufferedReader(
-									new InputStreamReader(
-											response.getEntity().getContent()
-									)
-							);
-						} catch (IllegalStateException e) {
-							// TODO Auto-generated catch block
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-						}
-
-						String line = null;
-						update = false;
-						try {
-							while ((line = reader.readLine()) != null){		     	  			  
-									if(!myactivity.getString(R.string.app_vname).equals(line.substring(0,5))){
-										update = true;
-										Intent intent = new Intent(Intent.ACTION_VIEW);
-										intent.setData(Uri.parse("market://details?id=com.suxsem.liquidnextparts"));
-										myactivity.startActivity(intent);
-										line = null;
-									}
-							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-						}
-					}else{
-						connection = false;
-					}
-					classactivity.runOnUiThread(new Runnable() {
-						public void run() {
-							if(update==false){	        			
-								if(!updaterom()){
-									if(connection){
-										Toast.makeText(myactivity, "No new ROM updates", 4000).show();
-									}else{
-										Toast.makeText(myactivity, "No Internet connection", 4000).show();	                
-									}
-								}
-							}		
-						}
-					});        	
-				}
-				catch (Exception e)
-				{
-				}
-				// dismiss the progressdialog
-				waitdialog.dismiss();
-			}
-		}.start();		   
 	}
 	
 	private void startdownload(Context myactivity){
