@@ -62,22 +62,6 @@ public class LSystem {
 			return false;
 	}
 	
-	public static boolean checkInitFolder(){
-		if (new File("/system/etc/init.d").exists()){
-			Log.d("LS-APP","init.d folder exists");
-		} else {
-			if (LiquidSettings.isRoot() && RemountRW()){
-				LiquidSettings.runRootCommand("mkdir /system/etc/init.d");
-				RemountROnly();
-				Log.d("LS-APP", "Created init.d folder in /system/etc");
-			} else{
-				Log.d("LS-APP", "Can't mkdir init.d: no root permissions or i'm not able to remount system");
-				return false;
-			}
-		}
-		return true;	
-	}
-	
 	public static boolean hapticAvailable(){
 		if (new File("/sys/module/avr/parameters/vibr").exists()){
 			Log.d("LS-APP","Haptic feedback path available");

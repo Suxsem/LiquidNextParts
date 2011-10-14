@@ -47,11 +47,9 @@ public class StartSystem {
 		editor.commit();
 	}
 	private void firstflash(Context context){
-		LSystem.RemountRW();
-		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16","30")+" > /system/etc/init.d/06sensitivity");
-		LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-		LSystem.RemountROnly();
-		LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity");
+		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16","30")+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+		LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+		LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity");
 
 		Log.d("liquidnext",Integer.toString(1));
 		Settings.System.putInt(context.getContentResolver(), "light_sensor_custom", 1);

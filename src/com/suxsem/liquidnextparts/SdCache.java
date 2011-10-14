@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 
+import android.content.Context;
+
 public class SdCache {
 	
 	public static boolean isCachePathAvailable(){
@@ -29,14 +31,10 @@ public class SdCache {
         return 0;
     }
 
-	public static boolean setSDCache(int value){
-		if (LSystem.RemountRW()){
-			LiquidSettings.runRootCommand("echo " + Strings.getSdCacheSizeString(value) + " > /system/etc/init.d/99sdcache");
-			LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/99sdcache");
-			LiquidSettings.runRootCommand("./system/etc/init.d/99sdcache");
-			LSystem.RemountROnly();
+	public static boolean setSDCache(int value, Context context){
+			LiquidSettings.runRootCommand("echo " + Strings.getSdCacheSizeString(value) + " > "+context.getString(R.string.initscriptfolder)+"99sdcache");
+			LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"99sdcache");
+			LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"99sdcache");
 			return true;
-		}
-		return false;
 	}
 }

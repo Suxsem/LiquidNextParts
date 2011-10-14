@@ -83,11 +83,7 @@ public class settings extends PreferenceActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
-				
-		if (!LSystem.checkInitFolder()){
-			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 4000).show();
-			this.finish(); //Exit app
-		}		
+
 		ROOT = LiquidSettings.isRoot();
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(myactivity);
@@ -147,7 +143,7 @@ public class settings extends PreferenceActivity {
 		}else{
 			usemetalcamera.setChecked(true);
 		}
-		undervoltedkernel.setChecked(UndervoltedKernel.checkenabled());
+		undervoltedkernel.setChecked(UndervoltedKernel.checkenabled(context));
 		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -164,15 +160,13 @@ public class settings extends PreferenceActivity {
 					noiseValue = "75";
 
 				if(ROOT) {
-					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
 						LSystem.RemountROnly();
-						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						if (LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity"))
 							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
 							Toast.makeText(context, "Error, unable to set noise", 4000).show();
-					}
 					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
@@ -197,15 +191,12 @@ public class settings extends PreferenceActivity {
 					sensitivityValue=("75");
 
 				if(ROOT) {
-					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-						LSystem.RemountROnly();
-						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						if (LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity"))
 							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
 							Toast.makeText(context, "Error, unable to set noise", 4000).show();
-					}
 					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
@@ -229,15 +220,12 @@ public class settings extends PreferenceActivity {
 					softsensValue=("30");
 
 				if(ROOT) {
-					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-						LSystem.RemountROnly();
-						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						if (LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity"))
 							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
 							Toast.makeText(context, "Error, unable to set noise", 4000).show();
-					}
 					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
@@ -256,7 +244,7 @@ public class settings extends PreferenceActivity {
 					}else{
 						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
 					}
-					if (BatteryLED.setdisable(powerled.isChecked())){						
+					if (BatteryLED.setdisable(powerled.isChecked(),context)){						
 						return true;
 					} else{
 						Toast.makeText(context, "Error while set Power LED disable", 4000).show();
@@ -273,7 +261,7 @@ public class settings extends PreferenceActivity {
 
 			public boolean onPreferenceClick(Preference preference) {
 				if (ROOT){
-					if (UndervoltedKernel.setenabled(undervoltedkernel.isChecked())){
+					if (UndervoltedKernel.setenabled(undervoltedkernel.isChecked(), context)){
 						LiquidSettings.runRootCommand("reboot");
 						return true;
 					} else{
@@ -309,16 +297,10 @@ public class settings extends PreferenceActivity {
 
 			public boolean onPreferenceClick(Preference preference) {
 				if(ROOT){
-					if(LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo " + ((hf.isChecked()) ? Strings.getvibr() : Strings.getnovibr()) + " > /system/etc/init.d/06vibrate");
+						LiquidSettings.runRootCommand("echo " + ((hf.isChecked()) ? Strings.getvibr() : Strings.getnovibr()) + " > "+context.getString(R.string.initscriptfolder)+"06vibrate");
 						LiquidSettings.runRootCommand("echo " + ((hf.isChecked()==true) ? "1": "0") +" > /sys/module/avr/parameters/vibr");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
-						LSystem.RemountROnly();
+						LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06vibrate");
 						Toast.makeText(context, "Haptic set on " + Boolean.toString(hf.isChecked()), 4000).show();
-					} else {
-						Toast.makeText(context, "Error: unable to mount partition", 4000).show();
-						hf.setChecked(false);
-					}
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
 					hf.setChecked(false);
@@ -343,15 +325,12 @@ public class settings extends PreferenceActivity {
 					hftimeValue=("2000");
 
 				if(ROOT) {
-					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > /system/etc/init.d/06sensitivity");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-						LSystem.RemountROnly();
-						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, softsensValue, hftimeValue)+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+						if (LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity"))
 							Toast.makeText(context, "Sensitivity set correctly", 4000).show();
 						else 
 							Toast.makeText(context, "Error, unable to set noise", 4000).show();
-					}
 					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 4000).show();
@@ -374,7 +353,7 @@ public class settings extends PreferenceActivity {
 				else if (newValueInt > 4096)
 					newValueInt = 4096;
 				if (ROOT){
-					if (SdCache.setSDCache(newValueInt)){
+					if (SdCache.setSDCache(newValueInt, context)){
 						Toast.makeText(context, "SD cache size set to " + newValueInt, 4000).show();
 						return true;
 					}else{
@@ -618,12 +597,10 @@ public class settings extends PreferenceActivity {
 		resetall.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				LSystem.RemountRW();
-				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06sensitivity");
-				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/10batteryled");
-				LiquidSettings.runRootCommand("rm -f /system/etc/init.d/06vibrate");
+				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"06sensitivity");
+				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"10batteryled");
+				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"06vibrate");
 				LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
-				LSystem.RemountROnly();
 				Editor editor = prefs.edit();
 				editor.putBoolean("firststart", true);
 				editor.commit();
