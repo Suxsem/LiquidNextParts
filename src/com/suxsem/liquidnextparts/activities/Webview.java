@@ -12,8 +12,8 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.suxsem.liquidnextparts.OTA_updates;
 import com.suxsem.liquidnextparts.R;
-import com.suxsem.liquidnextparts.components.NotificationHelper;
 
 public class Webview extends Activity { 
 
@@ -48,9 +48,9 @@ public class Webview extends Activity {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 					}
-					  NotificationHelper.adsfinish = true;
-					  if(NotificationHelper.waitflash){
-						  NotificationHelper.flashrom();
+					  OTA_updates.adsfinish = true;
+					  if(OTA_updates.waitflash){						  
+						  new OTA_updates().afterdownload();
 					  }
 					  webviewclass.finish();
 				}

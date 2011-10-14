@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="41"
+      android:versionCode="43"
       android:installLocation="auto" android:versionName="@string/app_vname" package="com.suxsem.liquidnextparts">
     <uses-sdk android:minSdkVersion="9" />
 
@@ -17,6 +17,7 @@
         </activity>
         <activity class=".OTA_updates_status"
         android:launchMode="singleTask"
+        android:screenOrientation="portrait"
         android:name=".activities.OTA_updates_status"
         android:label="LNP - Download status">
         </activity>
@@ -43,9 +44,11 @@
 		android:name=".activities.SDMAN"
         android:label="LNP - SDMAN" />
         		         
-		<receiver android:name=".components.BootReceiver">  
+		<receiver android:name=".IntentReceiver">  
     		<intent-filter>  
-        		<action android:name="android.intent.action.BOOT_COMPLETED" />       		
+        		<action android:name="android.intent.action.BOOT_COMPLETED" />
+        		<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+        		<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
     		</intent-filter>  
 		</receiver>
 		      	

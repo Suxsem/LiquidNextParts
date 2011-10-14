@@ -1,9 +1,6 @@
-package com.suxsem.liquidnextparts.components;
+package com.suxsem.liquidnextparts;
 
-import com.suxsem.liquidnextparts.LSystem;
-import com.suxsem.liquidnextparts.LiquidSettings;
 import com.suxsem.liquidnextparts.R;
-import com.suxsem.liquidnextparts.Strings;
 
 import android.app.Notification;
 import android.app.NotificationManager;

@@ -1,6 +1,5 @@
 package com.suxsem.liquidnextparts.activities;
 
-import com.suxsem.liquidnextparts.components.StartSystem;
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
@@ -9,6 +8,7 @@ import com.suxsem.liquidnextparts.NetworkMode;
 import com.suxsem.liquidnextparts.OTA_updates;
 import com.suxsem.liquidnextparts.R;
 import com.suxsem.liquidnextparts.SdCache;
+import com.suxsem.liquidnextparts.StartSystem;
 import com.suxsem.liquidnextparts.Strings;
 import com.suxsem.liquidnextparts.UndervoltedKernel;
 import com.suxsem.liquidnextparts.parsebuildprop;
