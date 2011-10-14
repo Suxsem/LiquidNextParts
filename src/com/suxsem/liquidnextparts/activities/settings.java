@@ -1,5 +1,7 @@
 package com.suxsem.liquidnextparts.activities;
 
+import java.io.File;
+
 import com.suxsem.liquidnextparts.BatteryLED;
 import com.suxsem.liquidnextparts.DiskSpace;
 import com.suxsem.liquidnextparts.LSystem;
@@ -139,13 +141,13 @@ public class settings extends PreferenceActivity {
 
 		updateValues();
 		
-		java.io.File file = new java.io.File("/system/app/Camera.stock_lock");
+		File file = new java.io.File("/system/app/Camera.stock_lock");
 		if (!file.exists()) {
 			usemetalcamera.setChecked(false);
 		}else{
 			usemetalcamera.setChecked(true);
 		}
-		usemetalcamera.setChecked(UndervoltedKernel.checkenabled());
+		undervoltedkernel.setChecked(UndervoltedKernel.checkenabled());
 		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
