@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="initscriptfolder">/system/lnpscripts/</string>
+<string name="initscriptfolder">/data/lnpscripts/</string>
 <string name="description">LiquidNextParts official app</string>
 <string name="app_name">LiquidNextParts</string>
 <string name="vibrON">Haptic Feedback ON</string>

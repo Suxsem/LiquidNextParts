@@ -8,7 +8,7 @@
 		<CheckBoxPreference android:key="sdman_data"
 			android:title="Data on sd-ext" android:summary="Move data to sd-ext partition partition instead of data. THIS ACTION WILL REBOOT YOUR DEVICE!" />
 		<CheckBoxPreference android:key="sdman_dalvik"
-			android:title="Dalvik on sd-ext" android:summary="Move dalvik-cache to sd-ext partition instead of data. THIS ACTION WILL REBOOT YOUR DEVICE!" />
+			android:title="Dalvik on sd-ext" android:summary="Move dalvik-cache to sd-ext partition instead of data. Dalvik on sd could slow down your phone. THIS ACTION WILL REBOOT YOUR DEVICE!" />
 		<CheckBoxPreference android:key="sdman_download"
 			android:title="Downloads on data" android:summary="Move download folder to data instead of cache. THIS ACTION WILL REBOOT YOUR DEVICE!" />
 </PreferenceCategory>

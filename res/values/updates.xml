@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_vname">2.2.6</string>
-<string name="firstflashincremental">4</string>
+<string name="firstflashincremental">6</string>
 <string name="previousversion">1.9</string>
 <string name="lastversion">LiquidNext 1.9.1</string>
 <string name="size">85.98</string>
