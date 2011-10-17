@@ -288,6 +288,9 @@ public class SDMAN extends PreferenceActivity {
 		sdman_dalvik.setChecked(sdman_dalvik_value);
 		sdman_download.setChecked(sdman_download_value);
 		sdman_swap.setChecked(sdman_swap_value);
+		
+		sdman_dalvik.setSummary("Feature temporarily disabled");
+		sdman_dalvik.setEnabled(false);
 	}	
 	
 	private boolean sdman_set(String arg){

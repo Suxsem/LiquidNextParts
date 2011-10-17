@@ -5,8 +5,11 @@ import java.util.Timer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ public class Webview extends Activity {
 	boolean firstloading = false;
 	TextView waittextview;
 	ProgressDialog waitdialog;
+	private SharedPreferences prefs;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
@@ -36,6 +40,8 @@ public class Webview extends Activity {
 		
 		waittextview = (TextView) findViewById(R.id.textView1);
 		waittextview.setText("Loading ADS...");
+		myactivity = this.getBaseContext();
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		 final CountDownTimer timer2 = new CountDownTimer(6000, 6000) {
 
 				@Override
@@ -46,11 +52,14 @@ public class Webview extends Activity {
 					  try {
 						waitdialog.dismiss();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 					}
-					  OTA_updates.adsfinish = true;
-					  if(OTA_updates.waitflash){						  
-						  new OTA_updates().afterdownload();
+					  
+					  
+					  Editor edit = prefs.edit();
+					  edit.putBoolean("adsfinish", true);
+					  edit.commit();
+					  if(prefs.getBoolean("waitflash", false)){						  
+						  new OTA_updates().afterdownload(myactivity);
 					  }
 					  webviewclass.finish();
 				}
@@ -95,7 +104,6 @@ public class Webview extends Activity {
    			 
    		 };
    		 
-		myactivity = this.getBaseContext();
 		mWebView = (WebView) findViewById(R.id.webView1);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);

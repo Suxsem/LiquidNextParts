@@ -82,8 +82,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
 				try {
 					dm.remove(prefs.getLong("otadownloadid", -1));
-					OTA_updates.context=context;
-					new OTA_updates().afterdownload();
+					new OTA_updates().afterdownload(context);
 				} catch (Exception e) {
 				}
 		}

@@ -16,14 +16,7 @@ import android.util.Log;
 public class StartSystem {
 	public void startsystem(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor editor = prefs.edit();
-		editor.putBoolean("firststart", prefs.getBoolean("firststart", true));
-		editor.putBoolean("noprox", prefs.getBoolean("noprox", false));
-		editor.putBoolean("updateonstart",prefs.getBoolean("updateonstart", true));
-		editor.putString("2g3gmode", prefs.getString("2g3gmode", "nm3"));
-		editor.commit();
 		if(prefs.getBoolean("firststart", true)){
-			editor.putBoolean("firststart", false);
 			int icon = android.R.drawable.stat_sys_warning;
 			CharSequence tickerText = "Welcome to LiquidNext!"; //Initial text that appears in the status bar
 			long when = System.currentTimeMillis();
@@ -37,16 +30,42 @@ public class StartSystem {
 			mNotificationManager.notify(2, mNotification);
 		}
 
+		LiquidSettings.runRootCommand("mkdir "+context.getString(R.string.initscriptfolder));
 		LiquidSettings.runRootCommand("echo 0 > /data/system/mail_led && chmod 777 /data/system/mail_led"); 
 
 		String firstflash = prefs.getString("firstflash", "0");
-		if(!firstflash.equals(context.getString(R.string.firstflashincremental))){			
-			editor.putString("firstflash", context.getString(R.string.firstflashincremental));
+		if(!firstflash.equals(context.getString(R.string.firstflashincremental))){
+			if(!prefs.getBoolean("firststart", true)){
+				int icon = android.R.drawable.stat_sys_warning;
+				CharSequence tickerText = "LNP preferences cleared"; //Initial text that appears in the status bar
+				long when = System.currentTimeMillis();
+				Notification mNotification = new Notification(icon, tickerText, when);
+				String mContentTitle = "LNP preferences cleared"; //Full title of the notification in the pull down
+				CharSequence contentText = "You have to set them again"; //Text of the notification in the pull down
+				Intent notificationIntent = new Intent();
+				PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+				mNotification.setLatestEventInfo(context, mContentTitle, contentText, mContentIntent);
+				NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+				mNotificationManager.notify(1, mNotification);				
+			}
 			firstflash(context);
 		}
-		editor.commit();
+		
 	}
-	private void firstflash(Context context){
+	
+	public void firstflash(Context context){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor editor;
+		editor = prefs.edit();
+		editor.clear();
+		editor.commit();
+		editor = prefs.edit();
+		editor.putBoolean("firststart", false);
+		editor.putString("firstflash", context.getString(R.string.firstflashincremental));
+		editor.commit();
+		LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"*");
+
+		LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
 		LiquidSettings.runRootCommand("echo "+Strings.getSens("70", "70", "16","30")+" > "+context.getString(R.string.initscriptfolder)+"06sensitivity");
 		LiquidSettings.runRootCommand("chmod +x "+context.getString(R.string.initscriptfolder)+"06sensitivity");
 		LiquidSettings.runRootCommand("."+context.getString(R.string.initscriptfolder)+"06sensitivity");
@@ -68,7 +87,7 @@ public class StartSystem {
 		long when = System.currentTimeMillis();
 		Notification mNotification = new Notification(icon, tickerText, when);
 		String mContentTitle = "System needs a REBOOT"; //Full title of the notification in the pull down
-		CharSequence contentText = "because it has just been configured"; //Text of the notification in the pull down
+		CharSequence contentText = "Because it has just been configured"; //Text of the notification in the pull down
 		Intent notificationIntent = new Intent();
 		PendingIntent mContentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 		mNotification.setLatestEventInfo(context, mContentTitle, contentText, mContentIntent);

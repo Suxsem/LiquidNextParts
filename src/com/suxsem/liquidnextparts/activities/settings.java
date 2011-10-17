@@ -597,14 +597,7 @@ public class settings extends PreferenceActivity {
 		resetall.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"06sensitivity");
-				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"10batteryled");
-				LiquidSettings.runRootCommand("rm -f "+context.getString(R.string.initscriptfolder)+"06vibrate");
-				LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
-				Editor editor = prefs.edit();
-				editor.putBoolean("firststart", true);
-				editor.commit();
-				new StartSystem().startsystem(myactivity);
+				new StartSystem().firstflash(myactivity);
 				return true;
 			}
 		});

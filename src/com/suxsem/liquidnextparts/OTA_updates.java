@@ -53,10 +53,6 @@ public class OTA_updates {
 	private File localfile;
 	private Editor prefeditor;
 	
-	public static boolean adsfinish = false;
-	public static boolean waitflash = false;
-	public static Context context;
-	
 	public void checkupdates(Context myactivitytemp, settings classactivitytemp) {
 		myactivity = myactivitytemp;
 		classactivity = classactivitytemp;
@@ -81,6 +77,7 @@ public class OTA_updates {
 					if (netInfo.getState() == android.net.NetworkInfo.State.CONNECTED
 							|| wifiInfo.getState() == android.net.NetworkInfo.State.CONNECTED) {
 						connection = true;
+						
 						HttpParams httpParameters = new BasicHttpParams();
 						HttpConnectionParams.setConnectionTimeout(
 								httpParameters, 10000);
@@ -414,6 +411,11 @@ public class OTA_updates {
 				dm.remove(prefs.getLong("otadownloadid", -1));
 			} catch (Exception e) {
 			}
+			Editor edit = prefs.edit();
+			edit.putBoolean("waitflash", false);
+			edit.putBoolean("adsfinish", false);
+			edit.commit();
+
 			long Download = dm
 					.enqueue(new DownloadManager.Request(uri)
 					.setAllowedNetworkTypes(
@@ -432,8 +434,7 @@ public class OTA_updates {
 			 (Intent.ACTION_VIEW).setClassName(myactivity,
 			 Webview.class.getName()));
 		} else {
-			context = myactivity;
-			afterdownload();
+			afterdownload(myactivity);
 		}
 	}
 
@@ -486,23 +487,26 @@ public class OTA_updates {
 		return "error";
 	}
 	
-	public void afterdownload(){
-		if(adsfinish){
-			flashrom();
+	public void afterdownload(Context context){
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		if(prefs.getBoolean("adsfinish", false)){
+			flashrom(context);
 		}else{
-			waitflash=true;
+			Editor edit = prefs.edit();
+			edit.putBoolean("waitflash", true);
+			edit.commit();
 		}
     	
 	}
 	
-	private void flashrom(){
+	private void flashrom(Context context){
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
     	if(prefs.getString("otadownloadrecovery","").equals("r1")){
     	
     		String tempcommand = "--update_package=SDCARD:LiquidNext_autoflash.zip";
     		LiquidSettings.runRootCommand("echo \""+tempcommand+"\" > /cache/recovery/command");
-    		LiquidSettings.runRootCommand("echo \""+prefs.getString("otadownloadlocation", "")+"\" > /cache/recovery/lnpreboot");
+    		LiquidSettings.runRootCommand("echo reboot > /cache/recovery/lnpreboot");
     		LiquidSettings.runRootCommand("reboot recovery");
     	}
     	if(prefs.getString("otadownloadrecovery","").equals("r2")){
